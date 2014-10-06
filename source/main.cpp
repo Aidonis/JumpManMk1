@@ -1,12 +1,12 @@
 ﻿#include "AIE.h"
 #include <iostream>
 
-bool CheckCollision(float x1, float y1, float x2, float y2, float distance);
+bool CheckCollision(float x1, float y1, float x2, float y2);
 
-struct Platform {
+struct Platform1 {
 	unsigned int spriteID;
-	float xPos;
-	float yPos;
+	float XPos;
+	float YPos;
 	int width;
 	int height;
 	unsigned int moveUp;
@@ -25,12 +25,25 @@ struct Platform {
 	}
 
 	void SetPosition(float a_x, float a_y){
-		xPos = a_x;
-		yPos = a_y;
+		XPos = a_x;
+		YPos = a_y;
+	}
+
+	float GetTop(){
+		return YPos + (height / 2);
+	}
+	float GetBottom(){
+		return YPos - (height / 2);
+	}
+	float GetLeft(){
+		return XPos - (width / 2);
+	}
+	float GetRight(){
+		return XPos + (width / 2);
 	}
 };
 
-struct Player {
+struct Player1 {
 	unsigned int spriteID;
 	float xPos;
 	float yPos;
@@ -60,8 +73,8 @@ struct Player {
 	}
 };
 
-Platform grass;
-Player player1;
+Platform1 grass;
+Player1 player1;
 
 int main(int argc, char* argv[])
 {
@@ -73,12 +86,12 @@ int main(int argc, char* argv[])
 	grass.SetSize(70, 70);
 	grass.SetPosition(400, 0);
 	grass.spriteID = CreateSprite("./images/tiles/grassHalf.png", grass.width, grass.height, true);
-	MoveSprite(grass.spriteID, grass.xPos, grass.yPos);
+	MoveSprite(grass.spriteID, grass.XPos, grass.YPos);
 
 	//Player 1
 	player1.SetSize(66, 92);
 	player1.SetPosition(400, 200);
-	player1.gravity = 50.f;
+	player1.gravity = 150.f;
 	player1.spriteID = CreateSprite("./images/p1_front.png", player1.width, player1.height, true);
 	player1.SetMoveKeys('A', 'D', 'W');
 	MoveSprite(player1.spriteID, player1.xPos, player1.yPos);
@@ -90,26 +103,14 @@ int main(int argc, char* argv[])
 		float deltaT = GetDeltaTime();
 
 		if (IsKeyDown(player1.moveUp)){
-			player1.xPos -= 5.f;
+			player1.xPos -= 50.f * deltaT;
 		}
 
 		if (IsKeyDown(player1.moveDown)){
-			player1.xPos += 5.f;
+			player1.xPos += 50.f * deltaT;
 		}
 
-		if (player1.yPos - (player1.height / 2) == grass.yPos + (grass.height / 2)){
-			if (IsKeyDown(player1.jump)){
-				player1.yPos += 65.f * deltaT;
-			}
-		}
 
-		if (!CheckCollision(grass.xPos, grass.yPos, player1.xPos, player1.yPos, 92)){
-			player1.yPos -= player1.gravity * deltaT;
-
-		}
-		else{
-			player1.yPos = grass.yPos + (grass.height / 2) + (player1.height / 2);
-		}
 		MoveSprite(player1.spriteID, player1.xPos, player1.yPos);
 		DrawSprite(player1.spriteID);
 		DrawSprite(grass.spriteID);
@@ -120,13 +121,4 @@ int main(int argc, char* argv[])
 	Shutdown();
 
 	return 0;
-}
-
-bool CheckCollision(float x1, float y1, float x2, float y2, float distance){
-	float d = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
-	if (d < distance)
-		return true;
-	else
-
-		return false;
 }
