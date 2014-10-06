@@ -1,4 +1,5 @@
 #pragma once
+#include "AIE.h"
 class Platform
 {
 public:
@@ -23,11 +24,13 @@ public:
 	void SetSpriteID(unsigned int a_spriteID);
 	unsigned int GetSpriteID();
 
+
 	float GetTop();
 	float GetBottom();
 	float GetLeft();
 	float GetRight();
 
+	void Draw();
 private:
 	unsigned int spriteID;
 	float XPos;

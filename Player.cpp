@@ -16,6 +16,11 @@ void Player::SetMoveKeys(unsigned int a_moveLeft, unsigned int a_moveRight, unsi
 	jump = a_jumpKey;
 }
 
+void Player::SetMoveExtremes(unsigned int a_leftExtreme, unsigned int a_rightExtreme){
+	leftExtreme = a_leftExtreme;
+	rightExtreme = a_rightExtreme;
+}
+
 unsigned int Player::GetLeftKey(){
 	return moveLeft;
 }
@@ -65,6 +70,9 @@ float Player::GetGravity(){
 void Player::SetSpriteID(unsigned int a_spriteID){
 	spriteID = a_spriteID;
 }
+void Player::SetSpeed(float a_speed){
+	speed = a_speed;
+}
 unsigned int Player::GetSpriteID(){
 	return spriteID;
 }
@@ -80,6 +88,25 @@ float Player::GetLeft(){
 }
 float Player::GetRight(){
 	return XPos + (width / 2);
+}
+
+void Player::Draw(){
+	MoveSprite(spriteID, XPos, YPos);
+	DrawSprite(spriteID);
+}
+void Player::Update(float a_deltaTime){
+	if (IsKeyDown(moveLeft)){
+		XPos -= a_deltaTime * speed;
+		if (XPos < (leftExtreme + width * .5f)){
+			XPos = (leftExtreme + width * .5f);
+		}
+	}
+	if (IsKeyDown(moveRight)){
+		XPos += a_deltaTime * speed;
+		if (XPos > (rightExtreme - width * .5f)){
+			XPos = (rightExtreme - width * .5f);
+		}
+	}
 }
 
 Player::~Player()

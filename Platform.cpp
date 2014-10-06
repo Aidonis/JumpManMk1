@@ -58,6 +58,10 @@ float Platform::GetLeft(){
 float Platform::GetRight(){
 	return XPos + (width / 2);
 }
+void Platform::Draw(){
+	MoveSprite(spriteID, XPos, YPos);
+	DrawSprite(spriteID);
+}
 
 Platform::~Platform()
 {
