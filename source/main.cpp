@@ -49,6 +49,7 @@ int main(int argc, char* argv[])
 
 		player1.Update(deltaT);
 		
+		//if not colliding
 		if (IsCollide()){
 			player1.SetY(player1.GetY() - player1.GetGravity() * deltaT);
 		}
@@ -66,11 +67,10 @@ int main(int argc, char* argv[])
 
 bool IsCollide(){
 	for (int i = 0; i < TOTAL_PLATFORMS; i++){
-		//if (player1.GetLeft() < grass[i].GetRight() && player1.GetRight() > grass[i].GetLeft()){
-			if (player1.GetBottom() < grass[i].GetTop()){
-				//player1.SetY(grass.GetTop() + (player1.GetHeight() / 2));
+
+			if (player1.GetBottom() <= grass[i].GetTop()){
+				player1.SetY(grass[i].GetTop() + (player1.GetHeight() * .5f));
 				return false;
-			//}
 		}
 	}
 }

@@ -34,6 +34,9 @@ public:
 	void SetY(float a_y);
 	float GetY();
 
+	void SetYSpeed(float a_ySpeed);
+	float GetYSpeed();
+
 	void SetGravity(float a_gravity);
 	float GetGravity();
 
@@ -53,6 +56,8 @@ private:
 	float XPos;
 	float YPos;
 
+	float YSpeed;
+
 	float gravity;
 	float width;
 	float height;
@@ -64,6 +69,8 @@ private:
 
 	unsigned int leftExtreme;
 	unsigned int rightExtreme;
+
+	bool jumpCD;
 
 };
 

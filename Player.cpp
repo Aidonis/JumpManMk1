@@ -3,6 +3,7 @@
 
 Player::Player()
 {
+	jumpCD = false;
 }
 
 void Player::SetSize(float a_width, float a_height){
@@ -73,6 +74,9 @@ void Player::SetSpriteID(unsigned int a_spriteID){
 void Player::SetSpeed(float a_speed){
 	speed = a_speed;
 }
+float Player::GetSpeed(){
+	return speed;
+}
 unsigned int Player::GetSpriteID(){
 	return spriteID;
 }
@@ -107,6 +111,8 @@ void Player::Update(float a_deltaTime){
 			XPos = (rightExtreme - width * .5f);
 		}
 	}
+
+	YPos -= gravity * a_deltaTime;
 }
 
 Player::~Player()
