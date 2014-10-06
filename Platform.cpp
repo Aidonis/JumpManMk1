@@ -5,6 +5,11 @@ Platform::Platform()
 {
 }
 
+void Platform::SetSize(float a_width, float a_height){
+	width = a_width;
+	height = a_height;
+}
+
 void Platform::SetPosition(float a_x, float a_y){
 	XPos = a_x;
 	YPos = a_y;
@@ -32,6 +37,26 @@ void Platform::SetY(float a_y){
 }
 float Platform::GetY(){
 	return YPos;
+}
+
+void Platform::SetSpriteID(unsigned int a_spriteID){
+	spriteID = a_spriteID;
+}
+unsigned int  Platform::GetSpriteID(){
+	return spriteID;
+}
+
+float Platform::GetTop(){
+	return YPos + (height / 2);
+}
+float Platform::GetBottom(){
+	return YPos - (height / 2);
+}
+float Platform::GetLeft(){
+	return XPos - (width / 2);
+}
+float Platform::GetRight(){
+	return XPos + (width / 2);
 }
 
 Platform::~Platform()

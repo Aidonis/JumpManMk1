@@ -5,6 +5,7 @@ public:
 	Platform();
 	~Platform();
 
+	void SetSize(float a_width, float a_height);
 	void SetPosition(float a_x, float a_y);
 
 	void SetWidth(float a_width);
@@ -19,6 +20,13 @@ public:
 	void SetY(float a_y);
 	float GetY();
 
+	void SetSpriteID(unsigned int a_spriteID);
+	unsigned int GetSpriteID();
+
+	float GetTop();
+	float GetBottom();
+	float GetLeft();
+	float GetRight();
 
 private:
 	unsigned int spriteID;
