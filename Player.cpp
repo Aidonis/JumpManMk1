@@ -111,7 +111,11 @@ void Player::Update(float a_deltaTime){
 			XPos = (rightExtreme - width * .5f);
 		}
 	}
-
+	if (YPos == 80.f){
+		if (IsKeyDown(jump)){
+			YPos += a_deltaTime * speed;
+		}
+	}
 	YPos -= gravity * a_deltaTime;
 }
 

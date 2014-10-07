@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
 	player1.SetSize(60, 80);
 	player1.SetPosition(400, 200);
 	player1.SetGravity(150.f);
-	player1.SetSpeed(150.f);
+	player1.SetSpeed(1200.f);
 	player1.SetSpriteID(CreateSprite("./images/p1_front.png", player1.GetWidth(), player1.GetHeight(), true));
 	player1.SetMoveKeys('A', 'D', 'W');
 	player1.SetMoveExtremes(0, SCREEN_WIDTH);
@@ -49,10 +49,11 @@ int main(int argc, char* argv[])
 
 		player1.Update(deltaT);
 		
-		//if not colliding
+		//if colliding
 		if (IsCollide()){
-			player1.SetY(player1.GetY() - player1.GetGravity() * deltaT);
+			/*player1.SetY(player1.GetY() - player1.GetGravity() * deltaT);*/
 		}
+
 
 		DrawGrass();
 		player1.Draw();
