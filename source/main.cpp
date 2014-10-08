@@ -10,11 +10,10 @@ const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 const int TOTAL_PLATFORMS = 14;
 
-
 Platform grass[TOTAL_PLATFORMS];
 Player player1;
 
-bool IsCollide();
+bool IsColliding();
 void DrawGrass();
 void LoadGrass();
 
@@ -24,17 +23,11 @@ int main(int argc, char* argv[])
 
 	SetBackgroundColour(SColour(0, 0, 0, 255));
 
-	//Initialize platform
-	//grass.SetSize(70, 70);
-	//grass.SetPosition(400, 0);
-	//grass.SetSpriteID(CreateSprite("./images/tiles/grassHalf.png", grass.GetWidth(), grass.GetHeight(), true));
-	//MoveSprite(grass.GetSpriteID(), grass.GetX(), grass.GetY());
-
 	//Player 1
 	player1.SetSize(60, 80);
 	player1.SetPosition(400, 200);
-	player1.SetGravity(150.f);
-	player1.SetSpeed(1200.f);
+	player1.SetGravity(5.f);
+	player1.SetSpeed(500.f);
 	player1.SetSpriteID(CreateSprite("./images/p1_front.png", player1.GetWidth(), player1.GetHeight(), true));
 	player1.SetMoveKeys('A', 'D', 'W');
 	player1.SetMoveExtremes(0, SCREEN_WIDTH);
@@ -44,20 +37,43 @@ int main(int argc, char* argv[])
 	//Game Loop
 	do
 	{
-
+		ClearScreen();
 		float deltaT = GetDeltaTime();
 
-		player1.Update(deltaT);
 		
-		//if colliding
-		if (IsCollide()){
-			/*player1.SetY(player1.GetY() - player1.GetGravity() * deltaT);*/
-		}
 
+		// ground shit
+
+		
+		if (IsColliding()){
+			// y velocity
+			player1.SetVelocity(0.0f);
+			player1.SetY(grass[0].GetTop() + player1.GetHeight() * 0.5f);
+
+			float jumpAccel = 800;
+
+			if (IsKeyDown('W'))
+			{
+				// kick the player up
+				player1.SetVelocity(player1.GetVelocity() + jumpAccel - (player1.GetGravity()));
+				//player1.SetY(player1.GetY() + player1.GetVelocity());
+				//player1.SetY(player1.GetY() + 5);
+			}
+		}
+		
+
+		else{
+			player1.SetVelocity((player1.GetVelocity() - (player1.GetGravity())));
+		}
+		
+		
 
 		DrawGrass();
+		player1.Update(deltaT);
 		player1.Draw();
-		ClearScreen();
+		
+
+		//std::cout << player1.GetVelocity() << std::endl;
 
 	} while (!FrameworkUpdate());
 
@@ -66,12 +82,15 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-bool IsCollide(){
+bool IsColliding(){
 	for (int i = 0; i < TOTAL_PLATFORMS; i++){
-
-			if (player1.GetBottom() <= grass[i].GetTop()){
-				player1.SetY(grass[i].GetTop() + (player1.GetHeight() * .5f));
-				return false;
+		if (player1.GetBottom() <= grass[i].GetTop())
+		{
+			//player1.SetY(grass[i].GetTop() + player1.GetHeight() * 0.5f);
+			return true;
+		}
+		else{
+			return false;
 		}
 	}
 }

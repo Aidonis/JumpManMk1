@@ -3,16 +3,15 @@
 #ifndef _PLAYER_H_
 #define _PLAYER_H_
 #include "AIE.h"
+#include "Entity.h"
 
-class Player
+class Player : public Entity
 {
 public:
 	Player();
 	~Player();
 
-	void SetSize(float a_width, float a_height);
 	void SetMoveKeys(unsigned int a_moveLeft, unsigned int a_moveRight, unsigned int a_jumpKey);
-	void SetPosition(float a_x, float a_y);
 	void SetMoveExtremes(unsigned int a_leftExtreme, unsigned int a_rightExtreme);
 
 	unsigned int GetLeftKey();
@@ -22,45 +21,18 @@ public:
 	void SetSpeed(float speed);
 	float GetSpeed();
 
-	void SetWidth(float a_width);
-	float GetWidth();
-
-	void SetHeight(float a_height);
-	float GetHeight();
-
-	void SetX(float a_x);
-	float GetX();
-
-	void SetY(float a_y);
-	float GetY();
-
-	void SetYSpeed(float a_ySpeed);
-	float GetYSpeed();
+	void SetVelocity(float a_velocity);
+	float GetVelocity();
 
 	void SetGravity(float a_gravity);
 	float GetGravity();
 
-	void SetSpriteID(unsigned int a_spriteID);
-	unsigned int GetSpriteID();
-
-	float GetTop();
-	float GetBottom();
-	float GetLeft();
-	float GetRight();
-
-	void Draw();
-	void Update(float a_deltaTime);
+	virtual void Update(float a_deltaTime);
+	virtual void Draw();
 
 private:
-	unsigned int spriteID;
-	float XPos;
-	float YPos;
-
-	float YSpeed;
-
+	float velocity;
 	float gravity;
-	float width;
-	float height;
 	float speed;
 
 	unsigned int moveLeft;
@@ -69,8 +41,6 @@ private:
 
 	unsigned int leftExtreme;
 	unsigned int rightExtreme;
-
-	bool jumpCD;
 
 };
 
