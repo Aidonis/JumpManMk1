@@ -5,7 +5,7 @@
 #include "Platform.h"
 #include <vector>
 
-const int TOTAL_PLATFORMS = 14;
+const int TOTAL_PLATFORMS = 12;
 
 class GameState : public BaseState
 {
@@ -21,6 +21,8 @@ public:
 private:
 	void PlayerLogic(Player* a_player, float a_deltaTime);
 	void LoadGrass();
+	bool IsGrounded(Player* a_player);
+
 
 private:
 	std::vector<Entity*> gameObjects;
