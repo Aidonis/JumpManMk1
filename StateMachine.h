@@ -7,8 +7,8 @@
 class StateMachine
 {
 public:
-	StateMachine();
-	~StateMachine();
+	StateMachine(void);
+	~StateMachine(void);
 
 	void PushState(BaseState* gameState);
 	BaseState* PopState();

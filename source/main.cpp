@@ -20,7 +20,6 @@ std::vector<Entity*> gameObjects;
 Player* player = new Player();
 
 bool IsColliding();
-void DrawGrass();
 void LoadGrass();
 
 int main(int argc, char* argv[])
@@ -59,16 +58,30 @@ int main(int argc, char* argv[])
 
 void GamePlayUpdate(float a_deltaTime){
 
+	for (auto object : gameObjects)
+	{
+		if (dynamic_cast<Player*>(object) != 0)
+		{
+			PlayerLogic(dynamic_cast<Player*>(object), a_deltaTime);
+		}
 
+		if (dynamic_cast<Player*>(object) != 0)
+		{
+			PlayerLogic(dynamic_cast<Player*>(object), a_deltaTime);
+		}
+
+		object->Update(a_deltaTime);
+		object->Draw();
+	}
 
 }
 
 bool IsColliding(){
-	for (auto grass : gameObjects)
+	for (auto object : gameObjects)
 	{
-		if (dynamic_cast<Platform*>(grass) != 0)
+		if (dynamic_cast<Platform*>(object) != 0)
 		{
-			Platform* grass = dynamic_cast<Platform*>(grass);
+			Platform* grass = dynamic_cast<Platform*>(object);
 			for (int i = 0; i < TOTAL_PLATFORMS; i++){
 				if (player->GetBottom() <= grass->GetTop())
 				{
@@ -145,9 +158,3 @@ void PlayerLogic(Player* a_player, float a_deltaTime)
 	a_player->Update(a_deltaTime);
 	a_player->Draw();
 }
-
-//void DrawGrass(){
-//	for (int i = 0; i < TOTAL_PLATFORMS; i++){
-//			grass[i].Draw();
-//	}
-//}

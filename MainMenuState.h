@@ -5,8 +5,8 @@
 class MainMenuState : public BaseState
 {
 public:
-	MainMenuState();
-	~MainMenuState();
+	MainMenuState(void);
+	~MainMenuState(void);
 
 	void Initialize();
 	void Update(float a_deltaTime, StateMachine* a_pSM);

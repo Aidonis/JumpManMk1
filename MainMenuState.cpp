@@ -1,18 +1,18 @@
 #include "MainMenuState.h"
 #include "AIE.h"
-//#include "GameState.h"
+#include "GameState.h"
 #include "StateMachine.h"
 
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
 
 
-MainMenuState::MainMenuState()
+MainMenuState::MainMenuState(void)
 {
 }
 
 
-MainMenuState::~MainMenuState()
+MainMenuState::~MainMenuState(void)
 {
 }
 
@@ -26,7 +26,7 @@ void MainMenuState::Update(float a_deltaTime, StateMachine* a_pSM)
 {
 	if (IsKeyDown(KEY_ENTER))
 	{
-		//a_pSM->PushState(new GameState());
+		a_pSM->PushState(new GameState());
 	}
 }
 
