@@ -21,6 +21,9 @@ public:
 	void SetSpeed(float speed);
 	float GetSpeed();
 
+	void SetAccel(float a_acceleration);
+	float GetAccel();
+
 	void SetVelocity(float a_velocity);
 	float GetVelocity();
 
@@ -31,6 +34,7 @@ public:
 	virtual void Draw();
 
 private:
+	float acceleration;
 	float velocity;
 	float gravity;
 	float speed;

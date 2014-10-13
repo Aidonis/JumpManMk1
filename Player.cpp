@@ -25,6 +25,14 @@ float Player::GetVelocity(){
 	return velocity;
 }
 
+void Player::SetAccel(float a_acceleration){
+	acceleration = a_acceleration;
+}
+
+float Player::GetAccel(){
+	return acceleration;
+}
+
 unsigned int Player::GetLeftKey(){
 	return moveLeft;
 }

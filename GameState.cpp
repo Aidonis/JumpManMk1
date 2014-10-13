@@ -21,11 +21,12 @@ void GameState::Initialize()
 	//Player 1
 	player->SetSize(60, 80);
 	player->SetPosition(400, 200);
-	player->SetGravity(.5f);
-	player->SetSpeed(50.f);
+	player->SetGravity(.1f);
+	player->SetSpeed(150.0f);
 	player->SetSpriteID(CreateSprite("./images/p1_front.png", player->GetWidth(), player->GetHeight(), true));
 	player->SetMoveKeys('A', 'D', 'W');
 	player->SetMoveExtremes(0, SCREEN_WIDTH);
+	player->SetAccel(400.0f);
 	MoveSprite(player->GetSpriteID(), player->GetX(), player->GetY());
 
 	gameObjects.push_back(player);
@@ -125,12 +126,10 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 				a_player->SetVelocity(0.0f);
 				a_player->SetY(grass->GetTop() + a_player->GetHeight() * 0.5f);
 
-				float jumpAccel = 800.0f;
-
 				if (IsKeyDown('W'))
 				{
 					// kick the player up
-					a_player->SetVelocity(a_player->GetVelocity() + jumpAccel - (a_player->GetGravity()));
+					a_player->SetVelocity(a_player->GetVelocity() + a_player->GetAccel() - (a_player->GetGravity()));
 				}
 			}
 			else{

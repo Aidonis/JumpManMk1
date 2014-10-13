@@ -29,12 +29,9 @@ int main(int argc, char* argv[])
 	do
 	{
 		ClearScreen();
-#ifdef _DEBUG
-		float deltaT = .0016f;
-#endif
-#ifndef _DEBUG
+
 		float deltaT = GetDeltaTime();
-#endif
+
 		state.Update(deltaT);
 		state.Draw();
 
