@@ -4,14 +4,20 @@
 #include <iostream>
 #include "Player.h"
 #include "Platform.h"
+#include <vector>
 
 //Const
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
-const int TOTAL_PLATFORMS = 14;
+extern const int SCREEN_WIDTH = 600;
+extern const int SCREEN_HEIGHT = 800;
+const int TOTAL_PLATFORMS = 16;
 
-Platform grass[TOTAL_PLATFORMS];
-Player player1;
+void GamePlayUpdate(float a_deltaTime);
+void PlayerLogic(Player* a_player, float a_deltaTime);
+
+//Platform grass[TOTAL_PLATFORMS];
+std::vector<Entity*> gameObjects;
+
+Player* player = new Player();
 
 bool IsColliding();
 void DrawGrass();
@@ -19,61 +25,30 @@ void LoadGrass();
 
 int main(int argc, char* argv[])
 {
-	Initialise(800, 600, false, "JumpMan");
+	Initialise(SCREEN_WIDTH, SCREEN_HEIGHT, false, "JumpMan");
 
 	SetBackgroundColour(SColour(0, 0, 0, 255));
 
 	//Player 1
-	player1.SetSize(60, 80);
-	player1.SetPosition(400, 200);
-	player1.SetGravity(5.f);
-	player1.SetSpeed(500.f);
-	player1.SetSpriteID(CreateSprite("./images/p1_front.png", player1.GetWidth(), player1.GetHeight(), true));
-	player1.SetMoveKeys('A', 'D', 'W');
-	player1.SetMoveExtremes(0, SCREEN_WIDTH);
-	MoveSprite(player1.GetSpriteID(), player1.GetX(), player1.GetY());
+	player->SetSize(60, 80);
+	player->SetPosition(400, 200);
+	player->SetGravity(5.f);
+	player->SetSpeed(500.f);
+	player->SetSpriteID(CreateSprite("./images/p1_front.png", player->GetWidth(), player->GetHeight(), true));
+	player->SetMoveKeys('A', 'D', 'W');
+	player->SetMoveExtremes(0, SCREEN_WIDTH);
+	MoveSprite(player->GetSpriteID(), player->GetX(), player->GetY());
 	LoadGrass();
+
+	gameObjects.push_back(player);
 
 	//Game Loop
 	do
 	{
 		ClearScreen();
 		float deltaT = GetDeltaTime();
-
 		
-
-		// ground shit
-
-		
-		if (IsColliding()){
-			// y velocity
-			player1.SetVelocity(0.0f);
-			player1.SetY(grass[0].GetTop() + player1.GetHeight() * 0.5f);
-
-			float jumpAccel = 800;
-
-			if (IsKeyDown('W'))
-			{
-				// kick the player up
-				player1.SetVelocity(player1.GetVelocity() + jumpAccel - (player1.GetGravity()));
-				//player1.SetY(player1.GetY() + player1.GetVelocity());
-				//player1.SetY(player1.GetY() + 5);
-			}
-		}
-		
-
-		else{
-			player1.SetVelocity((player1.GetVelocity() - (player1.GetGravity())));
-		}
-		
-		
-
-		DrawGrass();
-		player1.Update(deltaT);
-		player1.Draw();
-		
-
-		//std::cout << player1.GetVelocity() << std::endl;
+		GamePlayUpdate(deltaT);
 
 	} while (!FrameworkUpdate());
 
@@ -82,17 +57,30 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
+void GamePlayUpdate(float a_deltaTime){
+
+
+
+}
+
 bool IsColliding(){
-	for (int i = 0; i < TOTAL_PLATFORMS; i++){
-		if (player1.GetBottom() <= grass[i].GetTop())
+	for (auto grass : gameObjects)
+	{
+		if (dynamic_cast<Platform*>(grass) != 0)
 		{
-			//player1.SetY(grass[i].GetTop() + player1.GetHeight() * 0.5f);
-			return true;
-		}
-		else{
-			return false;
+			Platform* grass = dynamic_cast<Platform*>(grass);
+			for (int i = 0; i < TOTAL_PLATFORMS; i++){
+				if (player->GetBottom() <= grass->GetTop())
+				{
+					return true;
+				}
+				else{
+					return false;
+				}
+			}
 		}
 	}
+	
 }
 
 void LoadGrass(){
@@ -103,9 +91,11 @@ void LoadGrass(){
 
 	for (int i = 0; i < TOTAL_PLATFORMS; i++){
 
+		Platform* grass = new Platform();
+
 		//Initialize Sprite
-		grass[i].SetSize(player1.GetWidth(), player1.GetHeight());
-		grass[i].SetSpriteID(CreateSprite("./images/tiles/grassHalfMid.png", grass[i].GetWidth(), grass[i].GetHeight(), true));
+		grass->SetSize(player->GetWidth(), player->GetHeight());
+		grass->SetSpriteID(CreateSprite("./images/tiles/grassHalfMid.png", grass->GetWidth(), grass->GetHeight(), true));
 
 		if (grassX > SCREEN_WIDTH){
 			grassX = 0;
@@ -113,15 +103,51 @@ void LoadGrass(){
 		}
 
 		//initialize position
-		grass[i].SetPosition(grassX, grassY);
+		grass->SetPosition(grassX, grassY);
 
 		//Increment position
-		grassX += grass[i].GetWidth();
+		grassX += grass->GetWidth();
+
+		//Add to array
+		gameObjects.push_back(grass);
 	}
 }
 
-void DrawGrass(){
-	for (int i = 0; i < TOTAL_PLATFORMS; i++){
-			grass[i].Draw();
+void PlayerLogic(Player* a_player, float a_deltaTime)
+{
+	//How to jump
+	if (IsColliding())
+	{
+		for (auto grass : gameObjects)
+		{
+			if (dynamic_cast<Platform*>(grass) != 0)
+			{
+				Platform* grass = dynamic_cast<Platform*>(grass);
+				// y velocity
+				a_player->SetVelocity(0.0f);
+				a_player->SetY(grass->GetTop() + a_player->GetHeight() * 0.5f);
+
+				float jumpAccel = 700;
+
+				if (IsKeyDown('W'))
+				{
+					// kick the player up
+					a_player->SetVelocity(a_player->GetVelocity() + jumpAccel - (a_player->GetGravity()));
+				}
+			}
+
+
+			else{
+				a_player->SetVelocity((a_player->GetVelocity() - (a_player->GetGravity())));
+			}
+		}
 	}
+	a_player->Update(a_deltaTime);
+	a_player->Draw();
 }
+
+//void DrawGrass(){
+//	for (int i = 0; i < TOTAL_PLATFORMS; i++){
+//			grass[i].Draw();
+//	}
+//}
