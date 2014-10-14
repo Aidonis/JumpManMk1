@@ -21,6 +21,7 @@ public:
 private:
 	void PlayerLogic(Player* a_player, float a_deltaTime);
 	void LoadGrass();
+	//void LoadLadders();
 	bool IsGrounded(Player* a_player);
 
 

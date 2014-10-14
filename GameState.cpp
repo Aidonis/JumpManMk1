@@ -34,6 +34,7 @@ void GameState::Initialize()
 
 	//Load platforms
 	LoadGrass();
+	//LoadLadders();
 
 }
 void GameState::Update(float a_deltaTime, StateMachine* a_pSM)
@@ -90,7 +91,7 @@ void GameState::LoadGrass()
 		//New row?
 		if (grassX > SCREEN_WIDTH){
 			grassX = 0.0f;
-			grassY += 250;
+			grassY += 210;
 		}
 
 		//Increment position
@@ -100,6 +101,27 @@ void GameState::LoadGrass()
 		gameObjects.push_back(grass);
 	}
 }
+
+//void GameState::LoadLadders()
+//{
+//	//Initial Ladder
+//	float ladderX = SCREEN_WIDTH * 0.5f;
+//	float ladderY = 70;
+//
+//	for (int i = 0; i < 3; i++){
+//
+//		Platform* ladder = new Platform();
+//
+//		ladder->SetSize(70, 70);
+//		ladder->SetSpriteID(CreateSprite("./images/tiles/ladder_mid.png", ladder->GetWidth(), ladder->GetHeight(), true));
+//
+//		ladder->SetPosition(ladderX, ladderY);
+//
+//		ladderY += 70;
+//
+//		gameObjects.push_back(ladder);
+//	}
+//}
 
 bool GameState::IsGrounded(Player* a_player){
 	
