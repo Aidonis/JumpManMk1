@@ -100,7 +100,30 @@ void GameState::LoadGrass()
 	}
 }
 
+//BUGFIX::here is a simple circle collision algorithm with lots of comments
+/*
+will return true if player pointer is within .5 the height from .5 the grass pointer, otherwise will return false;
+*/
+bool GameState::isCollided(Player* player, Platform* grass)
+{
+	//the collision formula is (x2 - x1)^2 + (y2 - y1)^2 <= (r1 + r2)^2
+	//derived from distance formula -> sqrt((x2 - x1)^2 + (y2 - y1)^2)
+	float x1{ player->GetX() };
+	float y1{ player->GetY() };
+	float r1{ player->GetHeight() * 0.5f };
+
+	float x2{ grass->GetX() };
+	float y2{ grass->GetY() };
+	float r2{ grass->GetHeight() * 0.5f };
+
+	//return the result
+	return std::pow(x2 - x1, 2) + pow(y2 - y1, 2) <= pow(r1 + r2, 2);
+}
+
+//Instead of dissecting this algorithm I started from scratch.  I use a circle collider algorithm with .5 height as the radius.
 bool GameState::IsGrounded(Player* a_player){
+	
+	
 	for (auto object : gameObjects)
 	{
 		if (dynamic_cast<Platform*>(object) != 0)
@@ -127,7 +150,9 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 		if (dynamic_cast<Platform*>(object) != 0)
 		{
 			Platform* grass = dynamic_cast<Platform*>(object);
-			if (IsGrounded(a_player))
+		//BUGFIX::use my function here instead of yours for collision
+			//if (IsGrounded(a_player))
+			if (isCollided(a_player, grass))
 			{
 
 			
