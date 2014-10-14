@@ -3,6 +3,7 @@
 #include "BaseState.h"
 #include "Player.h"
 #include "Platform.h"
+#include "Ladders.h"
 #include <vector>
 
 const int TOTAL_PLATFORMS = 25;
@@ -21,7 +22,8 @@ public:
 private:
 	void PlayerLogic(Player* a_player, float a_deltaTime);
 	void LoadGrass();
-	//void LoadLadders();
+	void LoadLadders();
+	void LoadPlayer();
 	bool IsGrounded(Player* a_player);
 
 
