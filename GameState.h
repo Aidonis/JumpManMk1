@@ -5,7 +5,7 @@
 #include "Platform.h"
 #include <vector>
 
-const int TOTAL_PLATFORMS = 12;
+const int TOTAL_PLATFORMS = 15;
 
 class GameState : public BaseState
 {
@@ -26,7 +26,5 @@ private:
 
 private:
 	std::vector<Entity*> gameObjects;
-	Platform grass[TOTAL_PLATFORMS];
-
 };
 

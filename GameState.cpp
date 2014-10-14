@@ -20,13 +20,13 @@ void GameState::Initialize()
 
 	//Player 1
 	player->SetSize(60, 80);
-	player->SetPosition(400, 200);
+	player->SetPosition(200, 390);
 	player->SetGravity(.1f);
 	player->SetSpeed(150.0f);
 	player->SetSpriteID(CreateSprite("./images/p1_front.png", player->GetWidth(), player->GetHeight(), true));
 	player->SetMoveKeys('A', 'D', 'W');
 	player->SetMoveExtremes(0, SCREEN_WIDTH);
-	player->SetAccel(400.0f);
+	player->SetAccel(800.0f);
 	MoveSprite(player->GetSpriteID(), player->GetX(), player->GetY());
 
 	gameObjects.push_back(player);
@@ -86,6 +86,12 @@ void GameState::LoadGrass()
 		//initialize position
 		grass->SetPosition(grassX, grassY);
 
+		//New row?
+		if (grassX > SCREEN_WIDTH * .5f){
+			grassX = SCREEN_WIDTH * .01f;
+			grassY += 250;
+		}
+
 		//Increment position
 		grassX += grass->GetWidth();
 
@@ -100,6 +106,8 @@ bool GameState::IsGrounded(Player* a_player){
 		if (dynamic_cast<Platform*>(object) != 0)
 		{
 			Platform* grass = dynamic_cast<Platform*>(object);
+			float playerBottom = a_player->GetBottom();
+			float grassTop = grass->GetTop();
 			if (a_player->GetBottom() <= grass->GetTop())
 			{
 				return true;
@@ -122,9 +130,12 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 			if (IsGrounded(a_player))
 			{
 
+			
 				// y velocity
 				a_player->SetVelocity(0.0f);
-				a_player->SetY(grass->GetTop() + a_player->GetHeight() * 0.5f);
+				//if (a_player->GetY() - (a_player->GetVelocity() * a_deltaTime) >= grass->GetTop()){
+					a_player->SetY(grass->GetTop() + a_player->GetHeight() * 0.5f);
+				//}
 
 				if (IsKeyDown('W'))
 				{
@@ -138,8 +149,4 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 			}
 		}
 	}
-
-
-	//a_player->Update(a_deltaTime);
-	//a_player->Draw();
 }

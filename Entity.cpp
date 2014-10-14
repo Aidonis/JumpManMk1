@@ -3,6 +3,8 @@
 
 Entity::Entity()
 {
+
+
 }
 
 void Entity::SetSize(float a_width, float a_height)

@@ -46,6 +46,11 @@ protected:
 	float x;
 	float y;
 
+	//float top;
+	//float bottom;
+	//float left;
+	//float right;
+
 };
 
 #endif _ENTITY_H_
