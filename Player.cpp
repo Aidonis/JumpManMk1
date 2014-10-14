@@ -61,6 +61,14 @@ float Player::GetSpeed(){
 	return speed;
 }
 
+bool Player::isCollideTop(Entity* other){
+	if (GetBottom() - ySpeed >= other->GetTop()){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
 
 
 void Player::Draw(){
@@ -70,7 +78,8 @@ void Player::Draw(){
 void Player::Update(float a_deltaTime){
 
 	// change in vertical
-	y += velocity * a_deltaTime;
+	ySpeed = velocity * a_deltaTime;
+	y += ySpeed;
 
 	// change in horizontal
 	if (IsKeyDown(moveLeft)){

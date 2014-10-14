@@ -33,11 +33,14 @@ public:
 	virtual void Update(float a_deltaTime);
 	virtual void Draw();
 
+	virtual bool isCollideTop(Entity* other);
+
 private:
 	float acceleration;
 	float velocity;
 	float gravity;
 	float speed;
+	float ySpeed;
 
 	unsigned int moveLeft;
 	unsigned int moveRight;

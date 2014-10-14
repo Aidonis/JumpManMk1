@@ -10,6 +10,7 @@ Entity::Entity()
 //	return pow(x - other->GetX(), 2) + pow(y - other->GetY(), 2) <= pow(other->collisionDx + collisionDx, 2);
 //}
 
+//Box collision between entities
 bool Entity::isCollided(Entity* other){
 	if (GetLeft() > other->GetRight() ||
 		GetRight() < other->GetLeft() ||
@@ -17,6 +18,12 @@ bool Entity::isCollided(Entity* other){
 		GetBottom() > other->GetTop()){
 		return false;
 	}
+}
+
+//If the entity is colliding with the top, true
+//Else entity is colliding with the bottom
+bool Entity::isCollideTop(Entity* other){
+	return false;
 }
 
 void Entity::SetCollisionDx(float a_Dx){

@@ -29,8 +29,8 @@ public:
 	float GetX();
 	float GetY();
 
-	float GetTop();
 	float GetBottom();
+	float GetTop();
 	float GetLeft();
 	float GetRight();
 
@@ -38,6 +38,7 @@ public:
 	float GetCollisionDx();
 
 	bool isCollided(Entity* other);
+	virtual bool isCollideTop(Entity* other);
 
 	~Entity();
 

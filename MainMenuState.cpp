@@ -24,7 +24,7 @@ void MainMenuState::Initialize()
 
 void MainMenuState::Update(float a_deltaTime, StateMachine* a_pSM)
 {
-	if (IsKeyDown(KEY_ENTER))
+	if (IsKeyDown(257))
 	{
 		a_pSM->PushState(new GameState());
 	}

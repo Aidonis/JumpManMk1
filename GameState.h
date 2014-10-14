@@ -5,7 +5,7 @@
 #include "Platform.h"
 #include <vector>
 
-const int TOTAL_PLATFORMS = 15;
+const int TOTAL_PLATFORMS = 25;
 
 class GameState : public BaseState
 {

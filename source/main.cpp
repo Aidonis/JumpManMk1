@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 	SetBackgroundColour(SColour(0, 0, 0, 255));
 
 	StateMachine state;
-	state.PushState(new GameState());
+	state.PushState(new MainMenuState());
 	
 
 	//Game Loop
@@ -34,6 +34,7 @@ int main(int argc, char* argv[])
 
 		state.Update(deltaT);
 		state.Draw();
+		
 
 	} while (!FrameworkUpdate());
 
