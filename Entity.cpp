@@ -1,10 +1,30 @@
 #include "Entity.h"
-
+#include <math.h>
 
 Entity::Entity()
 {
+	collisionDx = 0.0f;
+}
 
+//bool Entity::isCollided(Entity* other){
+//	return pow(x - other->GetX(), 2) + pow(y - other->GetY(), 2) <= pow(other->collisionDx + collisionDx, 2);
+//}
 
+bool Entity::isCollided(Entity* other){
+	if (GetLeft() > other->GetRight() ||
+		GetRight() < other->GetLeft() ||
+		GetTop() < other->GetBottom() ||
+		GetBottom() > other->GetTop()){
+		return false;
+	}
+}
+
+void Entity::SetCollisionDx(float a_Dx){
+	collisionDx = a_Dx;
+}
+
+float Entity::GetCollisionDx(){
+	return collisionDx;
 }
 
 void Entity::SetSize(float a_width, float a_height)

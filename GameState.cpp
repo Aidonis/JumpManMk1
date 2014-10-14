@@ -2,6 +2,7 @@
 #include "AIE.h"
 #include "StateMachine.h"
 
+
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
 
@@ -104,42 +105,37 @@ void GameState::LoadGrass()
 /*
 will return true if player pointer is within .5 the height from .5 the grass pointer, otherwise will return false;
 */
-bool GameState::isCollided(Player* player, Platform* grass)
-{
-	//the collision formula is (x2 - x1)^2 + (y2 - y1)^2 <= (r1 + r2)^2
-	//derived from distance formula -> sqrt((x2 - x1)^2 + (y2 - y1)^2)
-	float x1{ player->GetX() };
-	float y1{ player->GetY() };
-	float r1{ player->GetHeight() * 0.5f };
-
-	float x2{ grass->GetX() };
-	float y2{ grass->GetY() };
-	float r2{ grass->GetHeight() * 0.5f };
-
-	//return the result
-	return std::pow(x2 - x1, 2) + pow(y2 - y1, 2) <= pow(r1 + r2, 2);
-}
+//bool GameState::isCollided(Player* player, Platform* grass)
+//{
+//	//the collision formula is (x2 - x1)^2 + (y2 - y1)^2 <= (r1 + r2)^2
+//	//derived from distance formula -> sqrt((x2 - x1)^2 + (y2 - y1)^2)
+//	float x1{ player->GetX() };
+//	float y1{ player->GetY() };
+//	float r1{ player->GetHeight() * 0.5f };
+//
+//	float x2{ grass->GetX() };
+//	float y2{ grass->GetY() };
+//	float r2{ grass->GetHeight() * 0.5f };
+//
+//	//return the result
+//	return std::pow(x2 - x1, 2) + pow(y2 - y1, 2) <= pow(r1 + r2, 2);
+//}
 
 //Instead of dissecting this algorithm I started from scratch.  I use a circle collider algorithm with .5 height as the radius.
 bool GameState::IsGrounded(Player* a_player){
-	
 	
 	for (auto object : gameObjects)
 	{
 		if (dynamic_cast<Platform*>(object) != 0)
 		{
 			Platform* grass = dynamic_cast<Platform*>(object);
-			float playerBottom = a_player->GetBottom();
-			float grassTop = grass->GetTop();
 			if (a_player->GetBottom() <= grass->GetTop())
 			{
 				return true;
 			}
-			else{
-				return false;
-			}
 		}
 	}
+	return false;
 }
 
 void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
@@ -152,15 +148,17 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 			Platform* grass = dynamic_cast<Platform*>(object);
 		//BUGFIX::use my function here instead of yours for collision
 			//if (IsGrounded(a_player))
-			if (isCollided(a_player, grass))
+
+			if (a_player->isCollided(grass))
 			{
 
 			
 				// y velocity
 				a_player->SetVelocity(0.0f);
-				//if (a_player->GetY() - (a_player->GetVelocity() * a_deltaTime) >= grass->GetTop()){
+				
+				if (a_player->GetBottom() - (a_player->GetVelocity() * a_deltaTime) > grass->GetTop()){
 					a_player->SetY(grass->GetTop() + a_player->GetHeight() * 0.5f);
-				//}
+				}
 
 				if (IsKeyDown('W'))
 				{

@@ -34,6 +34,11 @@ public:
 	float GetLeft();
 	float GetRight();
 
+	void SetCollisionDx(float a_dx);
+	float GetCollisionDx();
+
+	bool isCollided(Entity* other);
+
 	~Entity();
 
 protected:
@@ -46,10 +51,7 @@ protected:
 	float x;
 	float y;
 
-	//float top;
-	//float bottom;
-	//float left;
-	//float right;
+	float collisionDx;
 
 };
 
