@@ -39,6 +39,10 @@ void GameState::Update(float a_deltaTime, StateMachine* a_pSM)
 		{
 			PlayerLogic(dynamic_cast<Player*>(object), a_deltaTime);
 		}
+		if (dynamic_cast<Barrel*>(object) != 0)
+		{
+			BarrelLogic(dynamic_cast<Barrel*>(object), a_deltaTime);
+		}
 		object->Update(a_deltaTime);
 		object->Draw();
 	}
@@ -66,10 +70,10 @@ void GameState::LoadPlayer(){
 	player->SetPosition(200, 120);
 	player->SetGravity(.2f);
 	player->SetSpeed(175.0f);
+	player->SetAccel(700.0f);
 	player->SetSpriteID(CreateSprite("./images/p1_front.png", player->GetWidth(), player->GetHeight(), true));
 	player->SetMoveKeys('A', 'D', 'W');
 	player->SetMoveExtremes(0, SCREEN_WIDTH);
-	player->SetAccel(700.0f);
 	MoveSprite(player->GetSpriteID(), player->GetX(), player->GetY());
 
 	gameObjects.push_back(player);
@@ -131,33 +135,38 @@ void GameState::LoadLadders()
 
 void GameState::LoadBarrels(){
 	float barrelX = SCREEN_WIDTH * 0.2f;
-	float barrelY = SCREEN_HEIGHT * 0.8f;
+	float barrelY = SCREEN_HEIGHT * 0.5f;
 
 	Barrel* barrels = new Barrel();
 
 	barrels->SetSize(70, 70);
 	barrels->SetSpriteID(CreateSprite("./images/dirtCaveRockLarge.png", barrels->GetWidth(), barrels->GetHeight(), true));
 	
+	barrels->SetGravity(.2f);
+	barrels->SetSpeed(175.0f);
+	barrels->SetAccel(700.0f);
+
 	barrels->SetPosition(barrelX, barrelY);
+	MoveSprite(barrels->GetSpriteID(), barrels->GetX(), barrels->GetY());
 
 	gameObjects.push_back(barrels);
 }
 
-bool GameState::IsGrounded(Player* a_player){
-	
-	for (auto object : gameObjects)
-	{
-		if (dynamic_cast<Platform*>(object) != 0)
-		{
-			Platform* grass = dynamic_cast<Platform*>(object);
-			if (a_player->GetBottom() <= grass->GetTop())
-			{
-				return true;
-			}
-		}
-	}
-	return false;
-}
+//bool GameState::IsGrounded(Player* a_player){
+//	
+//	for (auto object : gameObjects)
+//	{
+//		if (dynamic_cast<Platform*>(object) != 0)
+//		{
+//			Platform* grass = dynamic_cast<Platform*>(object);
+//			if (a_player->GetBottom() <= grass->GetTop())
+//			{
+//				return true;
+//			}
+//		}
+//	}
+//	return false;
+//}
 
 void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 {
@@ -215,6 +224,43 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 		}
 		else{
 			a_player->SetOnLadder(false);
+		}
+	}
+}
+
+void GameState::BarrelLogic(Barrel* a_barrel, float a_deltaTime){
+	for (auto object : gameObjects)
+	{
+		if (dynamic_cast<Ladders*>(object) != 0){
+			Ladders* ladder = dynamic_cast<Ladders*>(object);
+			if (a_barrel->isCollided(ladder)){
+				a_barrel->SetOnLadder(true);
+				a_barrel->SetVelocity(0.0f);
+				a_barrel->SetY(a_barrel->GetY() - (75 * a_deltaTime));
+			}
+		}
+		else{
+			a_barrel->SetOnLadder(false);
+		}
+
+		if (dynamic_cast<Platform*>(object) != 0){
+			Platform* grass = dynamic_cast<Platform*>(object);
+			//if (a_barrel->isCollideTop(grass) && !a_barrel->GetOnLadder())
+			//{
+			//	a_barrel->SetVelocity(0.0f);
+			//	a_barrel->SetY(grass->GetTop() + a_barrel->GetHeight() * 0.5f);
+
+			//}
+			/*else if (a_barrel->GetOnLadder())
+			{
+				a_barrel->SetVelocity(0.0f);
+				a_barrel->SetY(grass->GetBottom() - a_barrel->GetHeight() * 0.5f);
+			}*/
+		}
+
+		else
+		{
+			a_barrel->SetVelocity((a_barrel->GetVelocity() - (a_barrel->GetGravity())));
 		}
 	}
 }

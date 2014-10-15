@@ -27,7 +27,7 @@ private:
 	void LoadLadders();
 	void LoadPlayer();
 	void LoadBarrels();
-	bool IsGrounded(Player* a_player);
+	//bool IsGrounded(Player* a_player);
 
 
 private:

@@ -3,6 +3,8 @@
 
 Barrel::Barrel()
 {
+	SetVelocity(0.0f);
+	onLadder = false;
 }
 
 
@@ -15,7 +17,9 @@ void Barrel::Draw(){
 	DrawSprite(spriteID);
 }
 void Barrel::Update(float a_deltaTime){
-
+	// change in vertical
+	ySpeed = velocity * .00016;
+	y += ySpeed;
 }
 
 void Barrel::SetSpeed(float a_speed){
@@ -30,4 +34,33 @@ void Barrel::SetOnLadder(bool a_onLadder){
 }
 bool Barrel::GetOnLadder(){
 	return false;
+}
+
+void Barrel::SetAccel(float a_acceleration){
+	acceleration = a_acceleration;
+}
+float Barrel::GetAccel(){
+	return acceleration;
+}
+
+void Barrel::SetVelocity(float a_velocity){
+	velocity = a_velocity;
+}
+float Barrel::GetVelocity(){
+	return velocity;
+}
+
+void Barrel::SetGravity(float a_gravity){
+	gravity = a_gravity;
+}
+float Barrel::GetGravity(){
+	return gravity;
+}
+bool Barrel::isCollideTop(Entity* other){
+	if (GetBottom() - ySpeed >= other->GetTop()){
+		return true;
+	}
+	else{
+		return false;
+	}
 }
