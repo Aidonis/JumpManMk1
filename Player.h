@@ -34,7 +34,10 @@ public:
 	virtual void Draw();
 
 	virtual bool isCollideTop(Entity* other);
-	virtual bool isOnLadder(Entity* other);
+
+	void SetOnLadder(bool a_onLadder);
+	bool GetOnLadder();
+
 
 private:
 	float acceleration;
@@ -42,6 +45,8 @@ private:
 	float gravity;
 	float speed;
 	float ySpeed;
+
+	bool onLadder;
 
 	unsigned int moveLeft;
 	unsigned int moveRight;

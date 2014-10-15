@@ -4,6 +4,7 @@
 Player::Player()
 {
 	SetVelocity(0.f);
+	onLadder = false;
 }
 
 void Player::SetMoveKeys(unsigned int a_moveLeft, unsigned int a_moveRight, unsigned int a_jumpKey){
@@ -68,6 +69,13 @@ bool Player::isCollideTop(Entity* other){
 	else{
 		return false;
 	}
+}
+
+void Player::SetOnLadder(bool a_onLadder){
+	onLadder = a_onLadder;
+}
+bool Player::GetOnLadder(){
+	return onLadder;
 }
 
 void Player::Draw(){

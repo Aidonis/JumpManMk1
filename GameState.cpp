@@ -79,6 +79,8 @@ void GameState::LoadGrass()
 	//Initial position
 	float grassX = 35.f;
 	float grassY = 35;
+	unsigned int spriteID = CreateSprite("./images/tiles/grassHalfMid.png", 70, 70, true);
+
 
 	for (int i = 0; i < TOTAL_PLATFORMS; i++){
 
@@ -86,7 +88,7 @@ void GameState::LoadGrass()
 
 		//Initialize Sprite
 		grass->SetSize(70,70);
-		grass->SetSpriteID(CreateSprite("./images/tiles/grassHalfMid.png", grass->GetWidth(), grass->GetHeight(), true));
+		grass->SetSpriteID(spriteID);
 
 		//initialize position
 		grass->SetPosition(grassX, grassY);
@@ -111,7 +113,7 @@ void GameState::LoadLadders()
 	float ladderX = SCREEN_WIDTH * 0.5f;
 	float ladderY = 105;
 
-	for (int i = 0; i < 3; i++){
+	for (int i = 0; i < 4; i++){
 
 		Ladders* ladder = new Ladders();
 
@@ -155,19 +157,19 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 			if (a_player->isCollided(grass))
 			{
 				//If colliding with the top of the platform
-				if (a_player->isCollideTop(grass))
+				if (a_player->isCollideTop(grass) && !a_player->GetOnLadder())
 				{
 					a_player->SetVelocity(0.0f);
 					a_player->SetY(grass->GetTop() + a_player->GetHeight() * 0.5f);
 
-					if (IsKeyDown(32))
+					if (IsKeyDown(32) && !a_player->GetOnLadder())
 					{
 						// kick the player up
 						a_player->SetVelocity(a_player->GetVelocity() + a_player->GetAccel() - (a_player->GetGravity()));
 					}
 
 				}
-				else
+				else if (a_player->GetOnLadder())
 				{
 					a_player->SetVelocity(0.0f);
 					a_player->SetY(grass->GetBottom() - a_player->GetHeight() * 0.5f);
@@ -185,18 +187,19 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 			Ladders* ladder = dynamic_cast<Ladders*>(object);
 
 			if (a_player->isCollided(ladder)){
-				a_player->isOnLadder = true;
-				a_player->SetVelocity(0.0f);
 				if (IsKeyDown('W')){
-					a_player->SetY(a_player->GetY() + (50 * a_deltaTime));
+					a_player->SetOnLadder(true);
+					a_player->SetVelocity(0.0f);
+					a_player->SetY(a_player->GetY() + (75 * a_deltaTime));
 				}
 				if (IsKeyDown('S')){
-					a_player->SetY(a_player->GetY() - (50 * a_deltaTime));
+					a_player->SetOnLadder(true);
+					a_player->SetY(a_player->GetY() - (75 * a_deltaTime));
 				}
 			}
 		}
 		else{
-			a_player->isOnLadder = false;
+			a_player->SetOnLadder(false);
 		}
 	}
 }
