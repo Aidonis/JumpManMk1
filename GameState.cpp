@@ -21,6 +21,7 @@ void GameState::Initialize()
 	LoadGrass();
 	LoadLadders();
 	LoadPlayer();
+	LoadBarrels();
 
 }
 void GameState::Update(float a_deltaTime, StateMachine* a_pSM)
@@ -126,6 +127,20 @@ void GameState::LoadLadders()
 
 		gameObjects.push_back(ladder);
 	}
+}
+
+void GameState::LoadBarrels(){
+	float barrelX = SCREEN_WIDTH * 0.2f;
+	float barrelY = SCREEN_HEIGHT * 0.8f;
+
+	Barrel* barrels = new Barrel();
+
+	barrels->SetSize(70, 70);
+	barrels->SetSpriteID(CreateSprite("./images/dirtCaveRockLarge.png", barrels->GetWidth(), barrels->GetHeight(), true));
+	
+	barrels->SetPosition(barrelX, barrelY);
+
+	gameObjects.push_back(barrels);
 }
 
 bool GameState::IsGrounded(Player* a_player){

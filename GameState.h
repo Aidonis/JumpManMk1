@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Platform.h"
 #include "Ladders.h"
+#include "Barrel.h"
 #include <vector>
 
 const int TOTAL_PLATFORMS = 25;
@@ -21,9 +22,11 @@ public:
 
 private:
 	void PlayerLogic(Player* a_player, float a_deltaTime);
+	void BarrelLogic(Barrel* a_barrel, float a_deltaTime);
 	void LoadGrass();
 	void LoadLadders();
 	void LoadPlayer();
+	void LoadBarrels();
 	bool IsGrounded(Player* a_player);
 
 
