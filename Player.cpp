@@ -70,7 +70,6 @@ bool Player::isCollideTop(Entity* other){
 	}
 }
 
-
 void Player::Draw(){
 	MoveSprite(spriteID, x, y);
 	DrawSprite(spriteID);

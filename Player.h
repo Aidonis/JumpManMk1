@@ -34,6 +34,7 @@ public:
 	virtual void Draw();
 
 	virtual bool isCollideTop(Entity* other);
+	virtual bool isOnLadder(Entity* other);
 
 private:
 	float acceleration;

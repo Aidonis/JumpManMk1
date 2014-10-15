@@ -40,6 +40,8 @@ public:
 	bool isCollided(Entity* other);
 	virtual bool isCollideTop(Entity* other);
 
+	bool isOnLadder;
+
 	~Entity();
 
 protected:

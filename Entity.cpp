@@ -4,6 +4,7 @@
 Entity::Entity()
 {
 	collisionDx = 0.0f;
+	isOnLadder = false;
 }
 
 //bool Entity::isCollided(Entity* other){
