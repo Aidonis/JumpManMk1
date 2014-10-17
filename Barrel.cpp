@@ -18,7 +18,7 @@ void Barrel::Draw(){
 }
 void Barrel::Update(float a_deltaTime){
 	// change in vertical
-	ySpeed = velocity * .00016;
+	ySpeed = velocity * a_deltaTime;
 	y += ySpeed;
 }
 

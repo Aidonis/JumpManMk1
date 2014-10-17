@@ -122,7 +122,7 @@ void GameState::LoadLadders()
 
 		Ladders* ladder = new Ladders();
 
-		ladder->SetSize(70, 70);
+		ladder->SetSize(40, 70);
 		ladder->SetSpriteID(CreateSprite("./images/tiles/ladder_mid.png", ladder->GetWidth(), ladder->GetHeight(), true));
 
 		ladder->SetPosition(ladderX, ladderY);
@@ -135,7 +135,7 @@ void GameState::LoadLadders()
 
 void GameState::LoadBarrels(){
 	float barrelX = SCREEN_WIDTH * 0.2f;
-	float barrelY = SCREEN_HEIGHT * 0.5f;
+	float barrelY = SCREEN_HEIGHT * 0.8f;
 
 	Barrel* barrels = new Barrel();
 
@@ -143,7 +143,7 @@ void GameState::LoadBarrels(){
 	barrels->SetSpriteID(CreateSprite("./images/dirtCaveRockLarge.png", barrels->GetWidth(), barrels->GetHeight(), true));
 	
 	barrels->SetGravity(.2f);
-	barrels->SetSpeed(175.0f);
+	barrels->SetSpeed(50.0f);
 	barrels->SetAccel(700.0f);
 
 	barrels->SetPosition(barrelX, barrelY);
@@ -211,9 +211,9 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 			Ladders* ladder = dynamic_cast<Ladders*>(object);
 
 			if (a_player->isCollided(ladder)){
+				a_player->SetVelocity(0.0f);
 				if (IsKeyDown('W')){
 					a_player->SetOnLadder(true);
-					a_player->SetVelocity(0.0f);
 					a_player->SetY(a_player->GetY() + (75 * a_deltaTime));
 				}
 				if (IsKeyDown('S')){
@@ -231,36 +231,40 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 void GameState::BarrelLogic(Barrel* a_barrel, float a_deltaTime){
 	for (auto object : gameObjects)
 	{
+		//If colliding with any platforms
+		if (dynamic_cast<Platform*>(object) != 0)
+		{
+			Platform* grass = dynamic_cast<Platform*>(object);
+
+			if (a_barrel->isCollided(grass))
+			{
+				//If colliding with the top of the platform and barrel is not on a ladder
+				if (a_barrel->isCollideTop(grass))
+				{
+					//Set Y Velocity to 0 and Y position on top of platform
+					a_barrel->SetVelocity(0.0f);
+					a_barrel->SetY(grass->GetTop() + a_barrel->GetHeight() * 0.5f);
+					a_barrel->SetX(a_barrel->GetX() + (a_barrel->GetSpeed() * a_deltaTime));
+				}
+			}
+
+			else
+			{
+				a_barrel->SetVelocity((a_barrel->GetVelocity() - (a_barrel->GetGravity())));
+			}
+		}
+		//If Player is Colliding with a Ladder
 		if (dynamic_cast<Ladders*>(object) != 0){
+
 			Ladders* ladder = dynamic_cast<Ladders*>(object);
+
 			if (a_barrel->isCollided(ladder)){
-				a_barrel->SetOnLadder(true);
-				a_barrel->SetVelocity(0.0f);
-				a_barrel->SetY(a_barrel->GetY() - (75 * a_deltaTime));
+					a_barrel->SetOnLadder(true);
+			//		a_barrel->SetY(a_barrel->GetY() - (a_barrel->GetSpeed() * a_deltaTime));
 			}
 		}
 		else{
 			a_barrel->SetOnLadder(false);
-		}
-
-		if (dynamic_cast<Platform*>(object) != 0){
-			Platform* grass = dynamic_cast<Platform*>(object);
-			//if (a_barrel->isCollideTop(grass) && !a_barrel->GetOnLadder())
-			//{
-			//	a_barrel->SetVelocity(0.0f);
-			//	a_barrel->SetY(grass->GetTop() + a_barrel->GetHeight() * 0.5f);
-
-			//}
-			/*else if (a_barrel->GetOnLadder())
-			{
-				a_barrel->SetVelocity(0.0f);
-				a_barrel->SetY(grass->GetBottom() - a_barrel->GetHeight() * 0.5f);
-			}*/
-		}
-
-		else
-		{
-			a_barrel->SetVelocity((a_barrel->GetVelocity() - (a_barrel->GetGravity())));
 		}
 	}
 }
