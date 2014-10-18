@@ -68,13 +68,13 @@ void GameState::LoadPlayer(){
 	//Player 1
 	player->SetSize(30, 40);
 	player->SetPosition(200, 120);
-	player->SetGravity(.2f);
+	player->SetGravity(.5f);
 	player->SetSpeed(175.0f);
-	player->SetAccel(700.0f);
+	player->SetAccel(400.0f);
 	player->SetSpriteID(CreateSprite("./images/p1_front.png", player->GetWidth(), player->GetHeight(), true));
 	player->SetMoveKeys('A', 'D', 'W');
 	player->SetMoveExtremes(0, SCREEN_WIDTH);
-	MoveSprite(player->GetSpriteID(), player->GetX(), player->GetY());
+	//MoveSprite(player->GetSpriteID(), player->GetX(), player->GetY());
 
 	gameObjects.push_back(player);
 }
@@ -96,6 +96,10 @@ void GameState::LoadGrass()
 		grass->SetSpriteID(spriteID);
 
 		//initialize position
+		if (i > 28){
+			grassX = SCREEN_WIDTH * 0.7f;
+			grassY = SCREEN_HEIGHT * 0.8f;
+		}
 		grass->SetPosition(grassX, grassY);
 
 		//New row?
@@ -115,41 +119,80 @@ void GameState::LoadGrass()
 void GameState::LoadLadders()
 {
 	//Initial Ladder
-	float ladderX = SCREEN_WIDTH * 0.5f;
-	float ladderY = 105;
+	float ladderX = SCREEN_WIDTH * 0.8f;
+	float ladderY = 145;
+	
+	for (int j = 0; j < 2; j++){
+		for (int i = 0; i < 4; i++){
+			if (j == 1){
+				Ladders* ladder = new Ladders();
 
-	for (int i = 0; i < 4; i++){
+				ladder->SetSize(40, 70);
+				ladder->SetSpriteID(CreateSprite("./images/tiles/ladder_mid.png", ladder->GetWidth(), ladder->GetHeight(), true));
 
-		Ladders* ladder = new Ladders();
+				//Set new start position
+				ladderX = SCREEN_WIDTH * 0.2f;
+				ladder->SetPosition(ladderX, ladderY);
 
-		ladder->SetSize(40, 70);
-		ladder->SetSpriteID(CreateSprite("./images/tiles/ladder_mid.png", ladder->GetWidth(), ladder->GetHeight(), true));
 
-		ladder->SetPosition(ladderX, ladderY);
+				//Increment position
+				ladderY += 70;
 
-		ladderY += 70;
+				gameObjects.push_back(ladder);
+			}
+			else if (j == 0){
+				Ladders* ladder = new Ladders();
 
-		gameObjects.push_back(ladder);
+				ladder->SetSize(40, 70);
+				ladder->SetSpriteID(CreateSprite("./images/tiles/ladder_mid.png", ladder->GetWidth(), ladder->GetHeight(), true));
+
+				ladder->SetPosition(ladderX, ladderY);
+
+				ladderY += 70;
+
+				gameObjects.push_back(ladder);
+			}
+		}
 	}
 }
 
 void GameState::LoadBarrels(){
 	float barrelX = SCREEN_WIDTH * 0.2f;
 	float barrelY = SCREEN_HEIGHT * 0.8f;
+	float barrelSpeed = 50.f;
 
-	Barrel* barrels = new Barrel();
+	unsigned int spriteID = CreateSprite("./images/dirtCaveRockLarge.png", 70, 70, true);
 
-	barrels->SetSize(70, 70);
-	barrels->SetSpriteID(CreateSprite("./images/dirtCaveRockLarge.png", barrels->GetWidth(), barrels->GetHeight(), true));
-	
-	barrels->SetGravity(.2f);
-	barrels->SetSpeed(50.0f);
-	barrels->SetAccel(700.0f);
+	for (int i = 0; i < 3; i++){
+		if (i == 1){
+			barrelY = SCREEN_HEIGHT * 0.5f;
+			barrelX = SCREEN_WIDTH * 0.8f;
+			barrelSpeed *= -1;
+		}
+		else if (i == 2){
+			barrelX = SCREEN_WIDTH * 0.4f;
+			barrelY = SCREEN_HEIGHT * 0.2f;
+			barrelSpeed *= -1;
+		}
+		else
+		{
+			barrelY = SCREEN_HEIGHT * 0.8f;
+		}
+		Barrel* barrels = new Barrel();
 
-	barrels->SetPosition(barrelX, barrelY);
-	MoveSprite(barrels->GetSpriteID(), barrels->GetX(), barrels->GetY());
+		barrels->SetSize(70, 70);
+		barrels->SetSpriteID(spriteID);
 
-	gameObjects.push_back(barrels);
+		barrels->SetGravity(.2f);
+		barrels->SetSpeed(barrelSpeed);
+		barrels->SetAccel(700.0f);
+
+		barrels->SetPosition(barrelX, barrelY);
+		barrels->SetMoveExtremes(0, SCREEN_WIDTH);
+		MoveSprite(barrels->GetSpriteID(), barrels->GetX(), barrels->GetY());
+
+		gameObjects.push_back(barrels);
+	}
 }
 
 //bool GameState::IsGrounded(Player* a_player){

@@ -7,7 +7,7 @@
 #include "Barrel.h"
 #include <vector>
 
-const int TOTAL_PLATFORMS = 25;
+const int TOTAL_PLATFORMS = 31;
 
 class GameState : public BaseState
 {

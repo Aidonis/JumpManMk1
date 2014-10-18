@@ -29,12 +29,16 @@ public:
 	void SetGravity(float a_gravity);
 	float GetGravity();
 
+	void SetMoveExtremes(unsigned int a_leftExtreme, unsigned int a_rightExtreme);
+
 private:
 	float speed;
 	float acceleration;
 	float gravity;
 	float velocity;
 	float ySpeed;
+	float leftExtreme;
+	float rightExtreme;
 
 	bool onLadder;
 

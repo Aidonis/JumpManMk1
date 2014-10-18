@@ -20,6 +20,15 @@ void Barrel::Update(float a_deltaTime){
 	// change in vertical
 	ySpeed = velocity * a_deltaTime;
 	y += ySpeed;
+
+	if (x < (leftExtreme + width * .5f)){
+		x = (leftExtreme + width * .5f);
+		speed *= -1;
+	}
+	if (x > (rightExtreme - width * .5f)){
+		x = (rightExtreme - width * .5f);
+		speed *= -1;
+	}
 }
 
 void Barrel::SetSpeed(float a_speed){
@@ -27,6 +36,11 @@ void Barrel::SetSpeed(float a_speed){
 }
 float Barrel::GetSpeed(){
 	return speed;
+}
+
+void Barrel::SetMoveExtremes(unsigned int a_leftExtreme, unsigned int a_rightExtreme){
+	leftExtreme = a_leftExtreme;
+	rightExtreme = a_rightExtreme;
 }
 
 void Barrel::SetOnLadder(bool a_onLadder){
