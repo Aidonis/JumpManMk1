@@ -70,11 +70,10 @@ void GameState::LoadPlayer(){
 	player->SetPosition(200, 120);
 	player->SetGravity(.5f);
 	player->SetSpeed(175.0f);
-	player->SetAccel(400.0f);
+	player->SetAccel(450.0f);
 	player->SetSpriteID(CreateSprite("./images/p1_front.png", player->GetWidth(), player->GetHeight(), true));
 	player->SetMoveKeys('A', 'D', 'W');
 	player->SetMoveExtremes(0, SCREEN_WIDTH);
-	//MoveSprite(player->GetSpriteID(), player->GetX(), player->GetY());
 
 	gameObjects.push_back(player);
 }
@@ -99,10 +98,11 @@ void GameState::LoadGrass()
 		if (i > 28){
 			grassX = SCREEN_WIDTH * 0.7f;
 			grassY = SCREEN_HEIGHT * 0.8f;
+
 		}
 		grass->SetPosition(grassX, grassY);
 
-		//New row?
+		//New row
 		if (grassX > SCREEN_WIDTH){
 			grassX = -35;
 			grassY += 250;
