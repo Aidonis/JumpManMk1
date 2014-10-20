@@ -81,7 +81,7 @@ void GameState::LoadPlayer(){
 	player->SetPosition(100, 120);
 	player->SetGravity(.2f);
 	player->SetSpeed(200.0f);
-	player->SetAccel(850.0f);
+	player->SetAccel(750.0f);
 	player->SetSpriteID(CreateSprite("./images/p1_front.png", player->GetWidth(), player->GetHeight(), true));
 	player->SetMoveKeys('A', 'D', 'W');
 	player->SetMoveExtremes(0, SCREEN_WIDTH);
@@ -170,7 +170,7 @@ void GameState::LoadLadders()
 void GameState::LoadBarrels(){
 	float barrelX = SCREEN_WIDTH * 0.2f;
 	float barrelY = SCREEN_HEIGHT * 0.8f;
-	float barrelSpeed = 50.f;
+	float barrelSpeed = 100.f;
 
 	unsigned int spriteID = CreateSprite("./images/dirtCaveRockLarge.png", 50, 50, true);
 
@@ -224,16 +224,40 @@ void GameState::LoadBarrels(){
 
 void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 {
+	a_player->SetOnLadder(false);
+
 	//All the collison
 	//for (auto object : gameObjects)
 	for (int i = 0; i < gameObjects.size(); i++)
 	{
 		Entity * object = gameObjects[i];
-		//If colliding with any platforms
-		if (dynamic_cast<Platform*>(object) != 0)
+
+		// If the current object is a ladder
+		if (dynamic_cast<Ladders*>(object) != 0){
+
+			Ladders* ladder = dynamic_cast<Ladders*>(object);
+			
+			//If colliding with any platforms
+			if (a_player->isCollided(ladder))
+			{
+				a_player->SetVelocity(0.0f);
+				if (IsKeyDown('W')){
+					a_player->SetOnLadder(true);
+					a_player->SetY(a_player->GetY() + (75 * a_deltaTime));
+				}
+				if (IsKeyDown('S')){
+					a_player->SetOnLadder(true);
+					a_player->SetY(a_player->GetY() - (75 * a_deltaTime));
+				}
+			}
+		}
+
+		// If the current object is a platform
+		else if (dynamic_cast<Platform*>(object) != 0)
 		{
 			Platform* grass = dynamic_cast<Platform*>(object);
 	
+			//if (a_player->isCollided(grass))
 			if (a_player->isCollided(grass))
 			{
 				//If the player is colliding with the top of the grass and not on a ladder
@@ -268,27 +292,9 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 				a_player->SetVelocity((a_player->GetVelocity() - (a_player->GetGravity())));
 			}
 		}
-		//If Player is Colliding with a Ladder
-		if (dynamic_cast<Ladders*>(object) != 0){
 
-			Ladders* ladder = dynamic_cast<Ladders*>(object);
 
-			if (a_player->isCollided(ladder)){
-				a_player->SetVelocity(0.0f);
-				if (IsKeyDown('W')){
-					a_player->SetOnLadder(true);
-					a_player->SetY(a_player->GetY() + (75 * a_deltaTime));
-				}
-				if (IsKeyDown('S')){
-					a_player->SetOnLadder(true);
-					a_player->SetY(a_player->GetY() - (75 * a_deltaTime));
-				}
-			}
-		}
-		else{
-			a_player->SetOnLadder(false);
-		}
-
+		// if it's a barrel
 		if (dynamic_cast<Barrel*>(object) != 0){
 			Barrel* barrels = dynamic_cast<Barrel*>(object);
 			if (a_player->scoreCheck(barrels)){
