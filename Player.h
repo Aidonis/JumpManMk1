@@ -41,6 +41,9 @@ public:
 	void SetOnLadder(bool a_onLadder);
 	bool GetOnLadder();
 
+	void SetIsWinner(bool a_winner);
+	bool GetIsWinner();
+
 
 private:
 	float acceleration;
@@ -51,6 +54,7 @@ private:
 
 	bool onLadder;
 	bool isActive;
+	bool isWinner;
 
 	unsigned int moveLeft;
 	unsigned int moveRight;

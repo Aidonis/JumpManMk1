@@ -6,6 +6,7 @@ Player::Player()
 	SetVelocity(0.f);
 	onLadder = false;
 	isActive = true;
+	isWinner = false;
 }
 
 void Player::SetMoveKeys(unsigned int a_moveLeft, unsigned int a_moveRight, unsigned int a_jumpKey){
@@ -68,6 +69,13 @@ void Player::SetSpeed(float a_speed){
 
 float Player::GetSpeed(){
 	return speed;
+}
+
+void Player::SetIsWinner(bool a_winner){
+	isWinner = a_winner;
+}
+bool Player::GetIsWinner(){
+	return isWinner;
 }
 
 bool Player::isCollideTop(Entity* other){

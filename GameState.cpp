@@ -1,5 +1,6 @@
 #include "GameState.h"
 #include "DeathState.h"
+#include "WinnerState.h"
 #include "AIE.h"
 #include "StateMachine.h"
 
@@ -41,6 +42,9 @@ void GameState::Update(float a_deltaTime, StateMachine* a_pSM)
 			PlayerLogic(dynamic_cast<Player*>(object), a_deltaTime);
 			if (!dynamic_cast<Player*>(object)->GetIsActive()){
 				a_pSM->SwitchState(new DeathState());
+			}
+			if (dynamic_cast<Player*>(object)->GetIsWinner()){
+				a_pSM->SwitchState(new WinnerState);
 			}
 		}
 		if (dynamic_cast<Barrel*>(object) != 0)
@@ -236,9 +240,10 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 					a_player->SetVelocity(0.0f);
 					a_player->SetY(grass->GetTop() + a_player->GetHeight() * 0.5f);
 
-					//if (grass == aidenObjects.back()){
-					//	a_player->SetIsActive(false);
-					//}
+					//If the player is above the final platform he wins
+					if (a_player->GetY() >= 675.0f && a_player->GetX() >= 385.0f && a_player->GetX() <= 455){
+						a_player->SetIsWinner(true);
+					}
 
 					//if the player is colliding with the platform and not on a ladder, press spacebar to jump
 					if (IsKeyDown(32) && !a_player->GetOnLadder())
