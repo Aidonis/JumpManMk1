@@ -5,6 +5,7 @@ Player::Player()
 {
 	SetVelocity(0.f);
 	onLadder = false;
+	isActive = true;
 }
 
 void Player::SetMoveKeys(unsigned int a_moveLeft, unsigned int a_moveRight, unsigned int a_jumpKey){
@@ -32,6 +33,13 @@ void Player::SetAccel(float a_acceleration){
 
 float Player::GetAccel(){
 	return acceleration;
+}
+
+void Player::SetIsActive(float a_isActive){
+	isActive = a_isActive;
+}
+bool Player::GetIsActive(){
+	return isActive;
 }
 
 unsigned int Player::GetLeftKey(){

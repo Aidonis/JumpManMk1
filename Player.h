@@ -30,6 +30,9 @@ public:
 	void SetGravity(float a_gravity);
 	float GetGravity();
 
+	void SetIsActive(float a_isActive);
+	bool GetIsActive();
+
 	virtual void Update(float a_deltaTime);
 	virtual void Draw();
 
@@ -47,6 +50,7 @@ private:
 	float ySpeed;
 
 	bool onLadder;
+	bool isActive;
 
 	unsigned int moveLeft;
 	unsigned int moveRight;

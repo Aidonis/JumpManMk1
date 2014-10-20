@@ -1,4 +1,5 @@
 #include "GameState.h"
+#include "DeathState.h"
 #include "AIE.h"
 #include "StateMachine.h"
 
@@ -38,6 +39,9 @@ void GameState::Update(float a_deltaTime, StateMachine* a_pSM)
 		if (dynamic_cast<Player*>(object) != 0)
 		{
 			PlayerLogic(dynamic_cast<Player*>(object), a_deltaTime);
+			if (!dynamic_cast<Player*>(object)->GetIsActive()){
+				a_pSM->SwitchState(new DeathState());
+			}
 		}
 		if (dynamic_cast<Barrel*>(object) != 0)
 		{
@@ -67,10 +71,10 @@ void GameState::LoadPlayer(){
 
 	//Player 1
 	player->SetSize(30, 40);
-	player->SetPosition(200, 120);
-	player->SetGravity(.5f);
-	player->SetSpeed(175.0f);
-	player->SetAccel(450.0f);
+	player->SetPosition(100, 120);
+	player->SetGravity(.2f);
+	player->SetSpeed(200.0f);
+	player->SetAccel(850.0f);
 	player->SetSpriteID(CreateSprite("./images/p1_front.png", player->GetWidth(), player->GetHeight(), true));
 	player->SetMoveKeys('A', 'D', 'W');
 	player->SetMoveExtremes(0, SCREEN_WIDTH);
@@ -94,7 +98,7 @@ void GameState::LoadGrass()
 		grass->SetSize(70,70);
 		grass->SetSpriteID(spriteID);
 
-		//initialize position
+		//initialize position winning platform
 		if (i > 28){
 			grassX = SCREEN_WIDTH * 0.7f;
 			grassY = SCREEN_HEIGHT * 0.8f;
@@ -223,20 +227,22 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 	
 			if (a_player->isCollided(grass))
 			{
-				//If colliding with the top of the platform
+				//If the player is colliding with the top of the grass and not on a ladder
+				//Set fall velocity to 0 and set player position above the platform
 				if (a_player->isCollideTop(grass) && !a_player->GetOnLadder())
 				{
 					a_player->SetVelocity(0.0f);
 					a_player->SetY(grass->GetTop() + a_player->GetHeight() * 0.5f);
 
+					//if the player is colliding with the platform and not on a ladder, press spacebar to jump
 					if (IsKeyDown(32) && !a_player->GetOnLadder())
 					{
-						// kick the player up
+						//Set velocity to itself + acceleration - some gravity
 						a_player->SetVelocity(a_player->GetVelocity() + a_player->GetAccel() - (a_player->GetGravity()));
 					}
 
 				}
-				else if (a_player->GetOnLadder())
+				if (a_player->GetOnLadder())
 				{
 					a_player->SetVelocity(0.0f);
 					a_player->SetY(grass->GetBottom() - a_player->GetHeight() * 0.5f);
@@ -308,6 +314,17 @@ void GameState::BarrelLogic(Barrel* a_barrel, float a_deltaTime){
 		}
 		else{
 			a_barrel->SetOnLadder(false);
+		}
+
+		if (dynamic_cast<Player*>(object) != 0){
+			Player* player = dynamic_cast<Player*>(object);
+
+			if (a_barrel->isCollided(player)){
+				//KILL THE PLAYER
+				player->SetIsActive(false);
+				//SWITCH TO DEATH STATE
+			}
+
 		}
 	}
 }
