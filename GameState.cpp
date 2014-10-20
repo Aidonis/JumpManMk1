@@ -35,15 +35,18 @@ void GameState::Update(float a_deltaTime, StateMachine* a_pSM)
 		return;
 	}
 
-	for (auto object : aidenObjects)
+	for (auto object : gameObjects)
 	{
 		if (dynamic_cast<Player*>(object) != 0)
 		{
-			PlayerLogic(dynamic_cast<Player*>(object), a_deltaTime);
-			if (!dynamic_cast<Player*>(object)->GetIsActive()){
+			Player* player = dynamic_cast<Player*>(object);
+
+			PlayerLogic(player, a_deltaTime);
+			if (!player->GetIsActive()){
+
 				a_pSM->SwitchState(new DeathState());
 			}
-			if (dynamic_cast<Player*>(object)->GetIsWinner()){
+			if (player->GetIsWinner()){
 				a_pSM->SwitchState(new WinnerState);
 			}
 		}
@@ -57,14 +60,14 @@ void GameState::Update(float a_deltaTime, StateMachine* a_pSM)
 }
 void GameState::Draw()
 {
-	for (auto object : aidenObjects)
+	for (auto object : gameObjects)
 	{
 		object->Draw();
 	}
 }
 void GameState::Destroy()
 {
-	for (auto object : aidenObjects)
+	for (auto object : gameObjects)
 	{
 		DestroySprite(object->GetSpriteID());
 	}
@@ -83,7 +86,7 @@ void GameState::LoadPlayer(){
 	player->SetMoveKeys('A', 'D', 'W');
 	player->SetMoveExtremes(0, SCREEN_WIDTH);
 
-	aidenObjects.push_back(player);
+	gameObjects.push_back(player);
 }
 
 void GameState::LoadGrass()
@@ -120,7 +123,7 @@ void GameState::LoadGrass()
 		grassX += grass->GetWidth();
 
 		//Add to array
-		aidenObjects.push_back(grass);
+		gameObjects.push_back(grass);
 	}
 }
 
@@ -146,7 +149,7 @@ void GameState::LoadLadders()
 				//Increment position
 				ladderY += 70;
 
-				aidenObjects.push_back(ladder);
+				gameObjects.push_back(ladder);
 			}
 			else if (j == 0){
 				Ladders* ladder = new Ladders();
@@ -158,7 +161,7 @@ void GameState::LoadLadders()
 
 				ladderY += 70;
 
-				aidenObjects.push_back(ladder);
+				gameObjects.push_back(ladder);
 			}
 		}
 	}
@@ -199,13 +202,13 @@ void GameState::LoadBarrels(){
 		barrels->SetMoveExtremes(0, SCREEN_WIDTH);
 		MoveSprite(barrels->GetSpriteID(), barrels->GetX(), barrels->GetY());
 
-		aidenObjects.push_back(barrels);
+		gameObjects.push_back(barrels);
 	}
 }
 
 //bool GameState::IsGrounded(Player* a_player){
 //	
-//	for (auto object : aidenObjects)
+//	for (auto object : gameObjects)
 //	{
 //		if (dynamic_cast<Platform*>(object) != 0)
 //		{
@@ -222,10 +225,10 @@ void GameState::LoadBarrels(){
 void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 {
 	//All the collison
-	//for (auto object : aidenObjects)
-	for (int i = 0; i < aidenObjects.size(); i++)
+	//for (auto object : gameObjects)
+	for (int i = 0; i < gameObjects.size(); i++)
 	{
-		Entity * object = aidenObjects[i];
+		Entity * object = gameObjects[i];
 		//If colliding with any platforms
 		if (dynamic_cast<Platform*>(object) != 0)
 		{
@@ -285,11 +288,23 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 		else{
 			a_player->SetOnLadder(false);
 		}
+
+		if (dynamic_cast<Barrel*>(object) != 0){
+			Barrel* barrels = dynamic_cast<Barrel*>(object);
+			if (a_player->scoreCheck(barrels)){
+				a_player->AddScore(10);
+			}
+		}
 	}
+
+	//Print Score Stuff
+	DrawString("Score < 1 >", SCREEN_WIDTH * 0.1f, SCREEN_HEIGHT - 2);
+	DrawString(a_player->GetScoreAsString(), SCREEN_WIDTH * 0.15f, SCREEN_HEIGHT - 35);
+
 }
 
 void GameState::BarrelLogic(Barrel* a_barrel, float a_deltaTime){
-	for (auto object : aidenObjects)
+	for (auto object : gameObjects)
 	{
 		//If colliding with any platforms
 		if (dynamic_cast<Platform*>(object) != 0)

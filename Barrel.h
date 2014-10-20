@@ -13,6 +13,8 @@ public:
 	void Draw();
 
 	virtual bool isCollideTop(Entity* other);
+	
+	//bool circleCollide(Entity* other);
 
 	void SetSpeed(float speed);
 	float GetSpeed();

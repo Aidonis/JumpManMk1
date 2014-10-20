@@ -1,5 +1,5 @@
 #include "Player.h"
-
+#include <string>
 
 Player::Player()
 {
@@ -7,6 +7,9 @@ Player::Player()
 	onLadder = false;
 	isActive = true;
 	isWinner = false;
+
+	score = 0;
+	AddScore(0);
 }
 
 void Player::SetMoveKeys(unsigned int a_moveLeft, unsigned int a_moveRight, unsigned int a_jumpKey){
@@ -41,6 +44,20 @@ void Player::SetIsActive(float a_isActive){
 }
 bool Player::GetIsActive(){
 	return isActive;
+}
+
+void Player::AddScore(unsigned int a_score){
+	score += a_score;
+	char buff[6];
+	sprintf(buff, "%05d", score);
+	strcpy(scoreAsString, buff);
+}
+int Player::GetScore(){
+	return score;
+}
+
+char* Player::GetScoreAsString(){
+	return scoreAsString;
 }
 
 unsigned int Player::GetLeftKey(){
@@ -84,6 +101,19 @@ bool Player::isCollideTop(Entity* other){
 	}
 	else{
 		return false;
+	}
+}
+
+//Check a collision box above the other object
+bool Player::scoreCheck(Entity* other){
+	if (GetLeft() > other->GetRight() ||
+		GetRight() < other->GetLeft() ||
+		GetBottom() < other->GetTop() ||
+		GetTop() > other->GetTop() + (other->GetHeight() * 3)){
+		return false;
+	}
+	else{
+		return true;
 	}
 }
 

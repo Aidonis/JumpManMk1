@@ -70,6 +70,7 @@ void Barrel::SetGravity(float a_gravity){
 float Barrel::GetGravity(){
 	return gravity;
 }
+
 bool Barrel::isCollideTop(Entity* other){
 	if (GetBottom() - ySpeed >= other->GetTop()){
 		return true;

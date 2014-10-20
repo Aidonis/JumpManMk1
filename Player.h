@@ -37,6 +37,7 @@ public:
 	virtual void Draw();
 
 	virtual bool isCollideTop(Entity* other);
+	bool scoreCheck(Entity* other);
 
 	void SetOnLadder(bool a_onLadder);
 	bool GetOnLadder();
@@ -44,6 +45,9 @@ public:
 	void SetIsWinner(bool a_winner);
 	bool GetIsWinner();
 
+	int GetScore();
+	void AddScore(unsigned int a_scoreValue);
+	char* GetScoreAsString();
 
 private:
 	float acceleration;
@@ -55,6 +59,9 @@ private:
 	bool onLadder;
 	bool isActive;
 	bool isWinner;
+
+	unsigned int score;
+	char scoreAsString[6];
 
 	unsigned int moveLeft;
 	unsigned int moveRight;
