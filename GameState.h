@@ -31,6 +31,6 @@ private:
 
 
 private:
-	std::vector<Entity*> gameObjects;
+	std::vector<Entity*> aidenObjects;
 };
 

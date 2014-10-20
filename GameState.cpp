@@ -34,7 +34,7 @@ void GameState::Update(float a_deltaTime, StateMachine* a_pSM)
 		return;
 	}
 
-	for (auto object : gameObjects)
+	for (auto object : aidenObjects)
 	{
 		if (dynamic_cast<Player*>(object) != 0)
 		{
@@ -53,14 +53,14 @@ void GameState::Update(float a_deltaTime, StateMachine* a_pSM)
 }
 void GameState::Draw()
 {
-	for (auto object : gameObjects)
+	for (auto object : aidenObjects)
 	{
 		object->Draw();
 	}
 }
 void GameState::Destroy()
 {
-	for (auto object : gameObjects)
+	for (auto object : aidenObjects)
 	{
 		DestroySprite(object->GetSpriteID());
 	}
@@ -79,7 +79,7 @@ void GameState::LoadPlayer(){
 	player->SetMoveKeys('A', 'D', 'W');
 	player->SetMoveExtremes(0, SCREEN_WIDTH);
 
-	gameObjects.push_back(player);
+	aidenObjects.push_back(player);
 }
 
 void GameState::LoadGrass()
@@ -116,7 +116,7 @@ void GameState::LoadGrass()
 		grassX += grass->GetWidth();
 
 		//Add to array
-		gameObjects.push_back(grass);
+		aidenObjects.push_back(grass);
 	}
 }
 
@@ -142,7 +142,7 @@ void GameState::LoadLadders()
 				//Increment position
 				ladderY += 70;
 
-				gameObjects.push_back(ladder);
+				aidenObjects.push_back(ladder);
 			}
 			else if (j == 0){
 				Ladders* ladder = new Ladders();
@@ -154,7 +154,7 @@ void GameState::LoadLadders()
 
 				ladderY += 70;
 
-				gameObjects.push_back(ladder);
+				aidenObjects.push_back(ladder);
 			}
 		}
 	}
@@ -165,7 +165,7 @@ void GameState::LoadBarrels(){
 	float barrelY = SCREEN_HEIGHT * 0.8f;
 	float barrelSpeed = 50.f;
 
-	unsigned int spriteID = CreateSprite("./images/dirtCaveRockLarge.png", 70, 70, true);
+	unsigned int spriteID = CreateSprite("./images/dirtCaveRockLarge.png", 50, 50, true);
 
 	for (int i = 0; i < 3; i++){
 		if (i == 1){
@@ -184,7 +184,7 @@ void GameState::LoadBarrels(){
 		}
 		Barrel* barrels = new Barrel();
 
-		barrels->SetSize(70, 70);
+		barrels->SetSize(50, 50);
 		barrels->SetSpriteID(spriteID);
 
 		barrels->SetGravity(.2f);
@@ -195,13 +195,13 @@ void GameState::LoadBarrels(){
 		barrels->SetMoveExtremes(0, SCREEN_WIDTH);
 		MoveSprite(barrels->GetSpriteID(), barrels->GetX(), barrels->GetY());
 
-		gameObjects.push_back(barrels);
+		aidenObjects.push_back(barrels);
 	}
 }
 
 //bool GameState::IsGrounded(Player* a_player){
 //	
-//	for (auto object : gameObjects)
+//	for (auto object : aidenObjects)
 //	{
 //		if (dynamic_cast<Platform*>(object) != 0)
 //		{
@@ -217,9 +217,11 @@ void GameState::LoadBarrels(){
 
 void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 {
-	//How to jump
-	for (auto object : gameObjects)
+	//All the collison
+	//for (auto object : aidenObjects)
+	for (int i = 0; i < aidenObjects.size(); i++)
 	{
+		Entity * object = aidenObjects[i];
 		//If colliding with any platforms
 		if (dynamic_cast<Platform*>(object) != 0)
 		{
@@ -234,6 +236,10 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 					a_player->SetVelocity(0.0f);
 					a_player->SetY(grass->GetTop() + a_player->GetHeight() * 0.5f);
 
+					//if (grass == aidenObjects.back()){
+					//	a_player->SetIsActive(false);
+					//}
+
 					//if the player is colliding with the platform and not on a ladder, press spacebar to jump
 					if (IsKeyDown(32) && !a_player->GetOnLadder())
 					{
@@ -245,8 +251,8 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 				if (a_player->GetOnLadder())
 				{
 					a_player->SetVelocity(0.0f);
-					a_player->SetY(grass->GetBottom() - a_player->GetHeight() * 0.5f);
 				}
+
 			}
 
 			else
@@ -278,7 +284,7 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 }
 
 void GameState::BarrelLogic(Barrel* a_barrel, float a_deltaTime){
-	for (auto object : gameObjects)
+	for (auto object : aidenObjects)
 	{
 		//If colliding with any platforms
 		if (dynamic_cast<Platform*>(object) != 0)

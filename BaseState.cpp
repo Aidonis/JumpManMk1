@@ -7,4 +7,5 @@ BaseState::BaseState(void)
 
 BaseState::~BaseState(void)
 {
+
 }
