@@ -244,6 +244,8 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 			{
 				a_player->SetOnLadder(true);
 				a_player->SetVelocity(0.0f);
+			}
+			if (a_player->GetOnLadder()){
 				if (IsKeyDown('W')){
 					a_player->SetY(a_player->GetY() + (75 * a_deltaTime));
 				}
@@ -263,8 +265,9 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 			{
 				//If the player is colliding with the top of the grass and not on a ladder
 				//Set fall velocity to 0 and set player position above the platform
-				if (a_player->isCollideTop(grass) && !a_player->GetOnLadder())
+				if (a_player->isCollideTop(grass))
 				{
+					a_player->SetIsOnGround(true);
 					a_player->SetVelocity(0.0f);
 					a_player->SetY(grass->GetTop() + a_player->GetHeight() * 0.5f);
 
@@ -272,14 +275,6 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 					if (a_player->GetY() >= SCREEN_HEIGHT * 0.8f && a_player->GetX() >= SCREEN_WIDTH * 0.8f - 35.0f && a_player->GetX() <= SCREEN_WIDTH * 0.8f + 35.0f){
 						a_player->SetIsWinner(true);
 					}
-
-					//if the player is colliding with the platform and not on a ladder, press spacebar to jump
-					if (IsKeyDown(32) && !a_player->GetOnLadder())
-					{
-						//Set velocity to itself + acceleration - some gravity
-						a_player->SetVelocity(a_player->GetVelocity() + a_player->GetAccel() - (a_player->GetGravity()));
-					}
-
 				}
 				if (a_player->GetOnLadder())
 				{
@@ -292,13 +287,23 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 			{
 				a_player->SetVelocity((a_player->GetVelocity() - (a_player->GetGravity())));
 			}
+			//If the player is on the ground
+			if (a_player->GetIsOnGround()){
+				//press spacebar to jump
+				if (IsKeyDown(32) && !a_player->GetOnLadder())
+				{
+					//Set velocity to itself + acceleration - some gravity
+					a_player->SetVelocity(a_player->GetVelocity() + a_player->GetAccel() - (a_player->GetGravity()));
+					a_player->SetIsOnGround(false);
+				}
+			}
 		}
 
 
 		// if it's a barrel
 		else if (dynamic_cast<Barrel*>(object) != 0){
 			Barrel* barrels = dynamic_cast<Barrel*>(object);
-			if (a_player->scoreCheck(barrels)){
+			if (a_player->scoreCheck(barrels) && !a_player->GetOnLadder() && !a_player->GetIsOnGround()){
 				a_player->AddScore(10);
 			}
 			if (a_player->isCollided(barrels)){

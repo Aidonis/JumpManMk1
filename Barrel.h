@@ -33,6 +33,9 @@ public:
 
 	void SetMoveExtremes(unsigned int a_leftExtreme, unsigned int a_rightExtreme);
 
+	void SetIsOnGround(bool a_grounded);
+	bool GetIsOnGround();
+
 private:
 	float speed;
 	float acceleration;
@@ -42,7 +45,10 @@ private:
 	float leftExtreme;
 	float rightExtreme;
 
+
+	//flags
 	bool onLadder;
+	bool onGround;
 
 };
 

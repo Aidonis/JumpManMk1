@@ -33,6 +33,9 @@ public:
 	void SetIsActive(float a_isActive);
 	bool GetIsActive();
 
+	void SetIsOnGround(bool a_grounded);
+	bool GetIsOnGround();
+
 	virtual void Update(float a_deltaTime);
 	virtual void Draw();
 
@@ -56,7 +59,9 @@ private:
 	float speed;
 	float ySpeed;
 
+	//flags
 	bool onLadder;
+	bool onGround;
 	bool isActive;
 	bool isWinner;
 
