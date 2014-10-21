@@ -300,6 +300,11 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 			if (a_player->scoreCheck(barrels)){
 				a_player->AddScore(10);
 			}
+			if (a_player->isCollided(barrels)){
+				//KILL THE PLAYER
+				a_player->SetIsActive(false);
+				//SWITCH TO DEATH STATE
+			}
 		}
 	}
 
@@ -346,17 +351,6 @@ void GameState::BarrelLogic(Barrel* a_barrel, float a_deltaTime){
 		}
 		else{
 			a_barrel->SetOnLadder(false);
-		}
-
-		if (dynamic_cast<Player*>(object) != 0){
-			Player* player = dynamic_cast<Player*>(object);
-
-			if (a_barrel->isCollided(player)){
-				//KILL THE PLAYER
-				player->SetIsActive(false);
-				//SWITCH TO DEATH STATE
-			}
-
 		}
 	}
 }
