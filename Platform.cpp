@@ -4,6 +4,7 @@
 Platform::Platform()
 {
 	SetSize(70, 70);
+	SetPosition(-35, 35);
 	SetSpriteID(CreateSprite("./images/tiles/grassHalfMid.png", width, height, true));
 }
 

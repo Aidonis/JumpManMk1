@@ -98,8 +98,8 @@ void GameState::LoadPlayer(){
 void GameState::LoadGrass()
 {
 	//Initial position
-	/*float grassX = 35.f;
-	float grassY = 35;*/
+	float grassX = -35.f;
+	float grassY = 35;
 	unsigned int spriteID = CreateSprite("./images/tiles/grassHalfMid.png", 70, 70, true);
 
 
@@ -109,21 +109,20 @@ void GameState::LoadGrass()
 
 		//initialize position winning platform
 		if (i > 28){
-			grass->SetX(SCREEN_WIDTH * 0.7f);
-			grass->SetY(SCREEN_HEIGHT * 0.8f);
+			grassX = SCREEN_WIDTH * 0.7f;
+			grassY = SCREEN_HEIGHT * 0.8f;
 
 		}
 
-		grass->SetPosition(grass->GetX(), grass->GetY());
-
 		//New row
-		if (grass->GetX() > SCREEN_WIDTH){
-			grass->SetX(-35);
-			grass->SetY(grass->GetY() + 250);
+		if (grassX > SCREEN_WIDTH){
+			grassX = -35;
+			grassY += 250;
 		}
 
 		//Increment position
-		grass->SetX(grass->GetX() + grass->GetWidth());
+		grassX += grass->GetWidth();
+		grass->SetPosition(grassX, grassY);
 
 		//Add to array
 		gameObjects.push_back(grass);
@@ -270,7 +269,7 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 					a_player->SetY(grass->GetTop() + a_player->GetHeight() * 0.5f);
 
 					//If the player is above the final platform he wins
-					if (a_player->GetY() >= 675.0f && a_player->GetX() >= 385.0f && a_player->GetX() <= 455){
+					if (a_player->GetY() >= SCREEN_HEIGHT * 0.8f && a_player->GetX() >= SCREEN_WIDTH * 0.8f - 35.0f && a_player->GetX() <= SCREEN_WIDTH * 0.8f + 35.0f){
 						a_player->SetIsWinner(true);
 					}
 
