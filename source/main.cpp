@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 	{
 		ClearScreen();
 
-		float deltaT = GetDeltaTime();
+		float deltaT = 0.0032f;//GetDeltaTime();
 
 		state.Update(deltaT);
 		state.Draw();

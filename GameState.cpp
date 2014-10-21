@@ -3,10 +3,11 @@
 #include "WinnerState.h"
 #include "AIE.h"
 #include "StateMachine.h"
-
+#include <iostream>
 
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
+std::vector<Entity*> GameState::gameObjects;
 
 GameState::GameState(void)
 {
@@ -20,14 +21,14 @@ GameState::~GameState(void)
 void GameState::Initialize()
 {
 	//Load Game Objects
+	gameObjects.erase(gameObjects.begin(), gameObjects.end());
 	LoadGrass();
 	LoadLadders();
 	LoadBarrels();
 	LoadPlayer();
 	
-
-
 }
+
 void GameState::Update(float a_deltaTime, StateMachine* a_pSM)
 {
 	if (IsKeyDown(256))
@@ -56,6 +57,9 @@ void GameState::Update(float a_deltaTime, StateMachine* a_pSM)
 		{
 			BarrelLogic(dynamic_cast<Barrel*>(object), a_deltaTime);
 		}
+
+	
+
 		object->Update(a_deltaTime);
 		object->Draw();
 	}
@@ -101,7 +105,6 @@ void GameState::LoadGrass()
 	float grassX = -35.f;
 	float grassY = 35;
 	unsigned int spriteID = CreateSprite("./images/tiles/grassHalfMid.png", 70, 70, true);
-
 
 	for (int i = 0; i < TOTAL_PLATFORMS; i++){
 
@@ -172,7 +175,7 @@ void GameState::LoadLadders()
 void GameState::LoadBarrels(){
 	float barrelX = SCREEN_WIDTH * 0.2f;
 	float barrelY = SCREEN_HEIGHT * 0.8f;
-	float barrelSpeed = 100.f;
+	float barrelSpeed = 10.f;
 
 	unsigned int spriteID = CreateSprite("./images/dirtCaveRockLarge.png", 50, 50, true);
 
@@ -184,7 +187,7 @@ void GameState::LoadBarrels(){
 		}
 		else if (i == 2){
 			barrelX = SCREEN_WIDTH * 0.4f;
-			barrelY = SCREEN_HEIGHT * 0.2f;
+			barrelY = SCREEN_HEIGHT * 0.9f;
 			barrelSpeed *= -1;
 		}
 		else
@@ -208,21 +211,6 @@ void GameState::LoadBarrels(){
 	}
 }
 
-//bool GameState::IsGrounded(Player* a_player){
-//	
-//	for (auto object : gameObjects)
-//	{
-//		if (dynamic_cast<Platform*>(object) != 0)
-//		{
-//			Platform* grass = dynamic_cast<Platform*>(object);
-//			if (a_player->GetBottom() <= grass->GetTop())
-//			{
-//				return true;
-//			}
-//		}
-//	}
-//	return false;
-//}
 
 void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 {
@@ -230,16 +218,15 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 	a_player->SetIsOnGround(false);
 
 	//All the collison
-	//for (auto object : gameObjects)
-	for (int i = 0; i < gameObjects.size(); i++)
-	{
-		Entity * object = gameObjects[i];
+	int count = 0;
 
+	for (auto object : gameObjects)
+	{
 		// If the current object is a ladder
 		if (dynamic_cast<Ladders*>(object) != 0){
 
 			Ladders* ladder = dynamic_cast<Ladders*>(object);
-			
+
 			//If colliding with any platforms
 			if (a_player->isCollided(ladder))
 			{
@@ -259,11 +246,15 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 		// If the current object is a platform
 		else if (dynamic_cast<Platform*>(object) != 0)
 		{
+			
+
 			Platform* grass = dynamic_cast<Platform*>(object);
 	
 			//if (a_player->isCollided(grass))
 			if (a_player->isCollided(grass))
 			{
+				
+
 				//If the player is colliding with the top of the grass and not on a ladder
 				//Set fall velocity to 0 and set player position above the platform
 				if (a_player->isCollideTop(grass) && !a_player->GetOnLadder())
@@ -295,6 +286,7 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 			{
 				a_player->SetVelocity((a_player->GetVelocity() - (a_player->GetGravity())));
 			}
+			count++;
 		}
 
 
@@ -312,6 +304,7 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 		}
 	}
 
+
 	//Draw Score
 	DrawString(a_player->GetScoreAsString(), SCREEN_WIDTH * 0.15f, SCREEN_HEIGHT - 35);
 }
@@ -320,24 +313,24 @@ void GameState::BarrelLogic(Barrel* a_barrel, float a_deltaTime){
 	
 	//Barrel default to not on ladder
 	a_barrel->SetOnLadder(false);
+	a_barrel->SetIsOnGround(false);
 	//Barrel default state is falling
-	a_barrel->SetVelocity((a_barrel->GetVelocity() - (a_barrel->GetGravity())));
 
 	for (auto object : gameObjects)
 	{
 		
 		//If Barrel is Colliding with a Ladder
-		if (dynamic_cast<Ladders*>(object) != 0){
+	/*	if (dynamic_cast<Ladders*>(object) != 0){
 
 			Ladders* ladder = dynamic_cast<Ladders*>(object);
 
 			if (a_barrel->isCollided(ladder)){
 				a_barrel->SetOnLadder(true);
 			}
-		}
+		}*/
 		
 		//If colliding with any platforms
-		else if (dynamic_cast<Platform*>(object) != 0)
+		if (dynamic_cast<Platform*>(object) != 0)
 		{
 			Platform* grass = dynamic_cast<Platform*>(object);
 
@@ -348,9 +341,17 @@ void GameState::BarrelLogic(Barrel* a_barrel, float a_deltaTime){
 				{
 					//Set Y Velocity to 0 and Y position on top of platform
 					a_barrel->SetVelocity(0.0f);
+					a_barrel->SetIsOnGround(true);
 					a_barrel->SetY(grass->GetTop() + a_barrel->GetHeight() * 0.5f);
-					a_barrel->SetX(a_barrel->GetX() + (a_barrel->GetSpeed() * a_deltaTime));
 				}
+			}
+			if (a_barrel->GetIsOnGround()){
+				//left right move
+				a_barrel->SetX(a_barrel->GetX() + (a_barrel->GetSpeed() * a_deltaTime));
+			}
+			else{
+				//falling
+				a_barrel->SetVelocity((a_barrel->GetVelocity() - (a_barrel->GetGravity())));
 			}
 		}
 	}
