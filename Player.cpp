@@ -7,6 +7,8 @@ Player::Player()
 	onLadder = false;
 	isActive = true;
 	isWinner = false;
+	onGround = false;
+
 
 	score = 0;
 	AddScore(0);
@@ -37,6 +39,13 @@ void Player::SetAccel(float a_acceleration){
 
 float Player::GetAccel(){
 	return acceleration;
+}
+
+void Player::SetIsOnGround(bool a_grounded){
+	onGround = a_grounded;
+}
+bool Player::GetIsOnGround(){
+	return onGround;
 }
 
 void Player::SetIsActive(float a_isActive){

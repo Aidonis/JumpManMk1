@@ -31,6 +31,9 @@ public:
 	void SetGravity(float a_gravity);
 	float GetGravity();
 
+	void SetIsOnGround(bool a_grounded);
+	bool GetIsOnGround();
+
 	void SetMoveExtremes(unsigned int a_leftExtreme, unsigned int a_rightExtreme);
 
 private:
@@ -42,7 +45,8 @@ private:
 	float leftExtreme;
 	float rightExtreme;
 
+	//flags
 	bool onLadder;
-
+	bool onGround;
 };
 

@@ -5,6 +5,7 @@ Barrel::Barrel()
 {
 	SetVelocity(0.0f);
 	onLadder = false;
+	onGround = false;
 }
 
 
@@ -48,6 +49,13 @@ void Barrel::SetOnLadder(bool a_onLadder){
 }
 bool Barrel::GetOnLadder(){
 	return false;
+}
+
+void Barrel::SetIsOnGround(bool a_grounded){
+	onGround = a_grounded;
+}
+bool Barrel::GetIsOnGround(){
+	return onGround;
 }
 
 void Barrel::SetAccel(float a_acceleration){

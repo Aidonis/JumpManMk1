@@ -49,6 +49,9 @@ public:
 	void AddScore(unsigned int a_scoreValue);
 	char* GetScoreAsString();
 
+	void SetIsOnGround(bool a_grounded);
+	bool GetIsOnGround();
+
 private:
 	float acceleration;
 	float velocity;
@@ -56,9 +59,11 @@ private:
 	float speed;
 	float ySpeed;
 
+	//flags
 	bool onLadder;
 	bool isActive;
 	bool isWinner;
+	bool onGround;
 
 	unsigned int score;
 	char scoreAsString[6];
