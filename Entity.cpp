@@ -3,7 +3,6 @@
 
 Entity::Entity()
 {
-	collisionDx = 0.0f;
 }
 
 //bool Entity::isCollided(Entity* other){
@@ -24,14 +23,6 @@ bool Entity::isCollided(Entity* other){
 //Else entity is colliding with the bottom
 bool Entity::isCollideTop(Entity* other){
 	return false;
-}
-
-void Entity::SetCollisionDx(float a_Dx){
-	collisionDx = a_Dx;
-}
-
-float Entity::GetCollisionDx(){
-	return collisionDx;
 }
 
 void Entity::SetSize(float a_width, float a_height)
