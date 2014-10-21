@@ -1,5 +1,5 @@
 #include "Barrel.h"
-
+#include <iostream>
 
 Barrel::Barrel()
 {
