@@ -21,12 +21,6 @@ public:
 	void SetSpeed(float speed);
 	float GetSpeed();
 
-	void SetAccel(float a_acceleration);
-	float GetAccel();
-
-	void SetVelocity(float a_velocity);
-	float GetVelocity();
-
 	void SetGravity(float a_gravity);
 	float GetGravity();
 
@@ -39,7 +33,6 @@ public:
 	virtual void Update(float a_deltaTime);
 	virtual void Draw();
 
-	virtual bool isCollideTop(Entity* other);
 	bool scoreCheck(Entity* other);
 
 	void SetOnLadder(bool a_onLadder);
@@ -52,18 +45,23 @@ public:
 	void AddScore(unsigned int a_scoreValue);
 	char* GetScoreAsString();
 
-private:
-	float acceleration;
-	float velocity;
-	float gravity;
-	float speed;
+	void SetIsOnGround(bool a_grounded);
+	bool GetIsOnGround();
+
+	virtual bool isCollideTop(Entity* other);
+
 	float ySpeed;
+
+private:
+
+	float gravity;
 
 	//flags
 	bool onLadder;
 	bool onGround;
 	bool isActive;
 	bool isWinner;
+	bool onGround;
 
 	unsigned int score;
 	char scoreAsString[6];

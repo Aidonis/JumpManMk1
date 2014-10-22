@@ -3,12 +3,14 @@
 
 Player::Player()
 {
-	SetVelocity(0.f);
+	//SetVelocity(0.f);
 	onLadder = false;
 	isActive = true;
 	isWinner = false;
 	onGround = false;
 
+	SetPosition(100, 420);
+	ySpeed = 150.0f;
 	score = 0;
 	AddScore(0);
 }
@@ -24,20 +26,11 @@ void Player::SetMoveExtremes(unsigned int a_leftExtreme, unsigned int a_rightExt
 	rightExtreme = a_rightExtreme;
 }
 
-void Player::SetVelocity(float a_velocity){
-	velocity = a_velocity;
+void Player::SetIsOnGround(bool a_grounded){
+	onGround = a_grounded;
 }
-
-float Player::GetVelocity(){
-	return velocity;
-}
-
-void Player::SetAccel(float a_acceleration){
-	acceleration = a_acceleration;
-}
-
-float Player::GetAccel(){
-	return acceleration;
+bool Player::GetIsOnGround(){
+	return onGround;
 }
 
 void Player::SetIsActive(float a_isActive){
@@ -103,15 +96,6 @@ bool Player::GetIsWinner(){
 	return isWinner;
 }
 
-bool Player::isCollideTop(Entity* other){
-	if (GetBottom() - ySpeed >= other->GetTop()){
-		return true;
-	}
-	else{
-		return false;
-	}
-}
-
 //Check a collision box above the other object
 bool Player::scoreCheck(Entity* other){
 	if (GetLeft() > other->GetRight() ||
@@ -122,6 +106,15 @@ bool Player::scoreCheck(Entity* other){
 	}
 	else{
 		return true;
+	}
+}
+
+bool Player::isCollideTop(Entity* other){
+	if (GetBottom() - yChange >= other->GetTop()){
+		return true;
+	}
+	else{
+		return false;
 	}
 }
 
@@ -138,19 +131,21 @@ void Player::Draw(){
 }
 void Player::Update(float a_deltaTime){
 
-	// change in vertical
-	ySpeed = velocity * a_deltaTime;
-	y += ySpeed;
+	//Speed * Velocity * Delta
+	yChange = ySpeed * velocity.y * a_deltaTime;
+	y += yChange;
 
 	// change in horizontal
 	if (IsKeyDown(moveLeft)){
-		x -= a_deltaTime * speed;
+		velocity.x = -1;
+		x += a_deltaTime * speed * velocity.x;
 		if (x < (leftExtreme + width * .5f)){
 			x = (leftExtreme + width * .5f);
 		}
 	}
 	if (IsKeyDown(moveRight)){
-		x += a_deltaTime * speed;
+		velocity.x = 1;
+		x += a_deltaTime * speed * velocity.x;
 		if (x > (rightExtreme - width * .5f)){
 			x = (rightExtreme - width * .5f);
 		}
