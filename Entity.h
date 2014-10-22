@@ -1,7 +1,7 @@
-#pragma once
-
 #ifndef _ENTITY_H_
 #define _ENTITY_H_
+
+#include "Vector2.h"
 
 class Entity
 {
@@ -36,6 +36,11 @@ public:
 
 	bool isCollided(Entity* other);
 	virtual bool isCollideTop(Entity* other);
+
+	Vector2 velocity;
+
+	//variables
+	float speed;
 
 	~Entity();
 

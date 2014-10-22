@@ -3,11 +3,10 @@
 
 Entity::Entity()
 {
-}
+	velocity = Vector2();
+	speed = 0.0f;
 
-//bool Entity::isCollided(Entity* other){
-//	return pow(x - other->GetX(), 2) + pow(y - other->GetY(), 2) <= pow(other->collisionDx + collisionDx, 2);
-//}
+}
 
 //Box collision between entities
 bool Entity::isCollided(Entity* other){
@@ -16,6 +15,9 @@ bool Entity::isCollided(Entity* other){
 		GetTop() < other->GetBottom() ||
 		GetBottom() > other->GetTop()){
 		return false;
+	}
+	else{
+		return true;
 	}
 }
 

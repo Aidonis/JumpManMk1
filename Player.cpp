@@ -3,13 +3,13 @@
 
 Player::Player()
 {
-	SetVelocity(0.f);
+	//SetVelocity(0.f);
 	onLadder = false;
 	isActive = true;
 	isWinner = false;
 	onGround = false;
 
-
+	ySpeed = 5.0f;
 	score = 0;
 	AddScore(0);
 }
@@ -23,22 +23,6 @@ void Player::SetMoveKeys(unsigned int a_moveLeft, unsigned int a_moveRight, unsi
 void Player::SetMoveExtremes(unsigned int a_leftExtreme, unsigned int a_rightExtreme){
 	leftExtreme = a_leftExtreme;
 	rightExtreme = a_rightExtreme;
-}
-
-void Player::SetVelocity(float a_velocity){
-	velocity = a_velocity;
-}
-
-float Player::GetVelocity(){
-	return velocity;
-}
-
-void Player::SetAccel(float a_acceleration){
-	acceleration = a_acceleration;
-}
-
-float Player::GetAccel(){
-	return acceleration;
 }
 
 void Player::SetIsOnGround(bool a_grounded){
@@ -104,15 +88,6 @@ bool Player::GetIsWinner(){
 	return isWinner;
 }
 
-bool Player::isCollideTop(Entity* other){
-	if (GetBottom() - ySpeed >= other->GetTop()){
-		return true;
-	}
-	else{
-		return false;
-	}
-}
-
 //Check a collision box above the other object
 bool Player::scoreCheck(Entity* other){
 	if (GetLeft() > other->GetRight() ||
@@ -139,9 +114,9 @@ void Player::Draw(){
 }
 void Player::Update(float a_deltaTime){
 
-	// change in vertical
-	ySpeed = velocity * a_deltaTime;
-	y += ySpeed;
+	//Speed * Velocity * Delta
+	y = ySpeed * velocity.y * a_deltaTime;
+
 
 	// change in horizontal
 	if (IsKeyDown(moveLeft)){

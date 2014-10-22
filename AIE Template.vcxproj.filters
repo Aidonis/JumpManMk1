@@ -89,5 +89,8 @@
     <ClInclude Include="WinnerState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Vector2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
