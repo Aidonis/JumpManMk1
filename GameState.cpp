@@ -264,7 +264,7 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 				//if the player is colliding with the platform and not on a ladder, press spacebar to jump
 				if (IsKeyDown(32))
 				{
-					a_player->ySpeed = 28000.f;
+					a_player->ySpeed += 850.f;
 					a_player->velocity.y = 1;
 
 				}
@@ -318,14 +318,13 @@ void GameState::BarrelLogic(Barrel* a_barrel, float a_deltaTime){
 				//If colliding with the top of the platform and barrel is not on a ladder
 				if (a_barrel->isCollideTop(grass))
 				{
-					//Set Y Velocity to 0 and Y position on top of platform
-					a_barrel->velocity = Vector2(0,0);
 					a_barrel->SetIsOnGround(true);
 					a_barrel->SetY(grass->GetTop() + a_barrel->GetHeight() * 0.5f);
 				}
 			}
 			if (a_barrel->GetIsOnGround()){
 				//left right move
+				a_barrel->velocity = Vector2(0, 0);
 				a_barrel->SetX(a_barrel->GetX() + (a_barrel->GetSpeed() * a_deltaTime));
 			}
 			else if (!a_barrel->GetIsOnGround())
