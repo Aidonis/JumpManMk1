@@ -12,7 +12,8 @@ public:
 	void Update(float a_deltaTime);
 	void Draw();
 
-	virtual bool isCollideTop(Entity* other);
+	virtual bool IsCollideTop(Entity* other);
+	virtual void Move(float a_deltaTime);
 
 	void SetSpeed(float speed);
 	float GetSpeed();
@@ -24,7 +25,7 @@ public:
 	bool GetIsOnGround();
 
 	void SetMoveExtremes(unsigned int a_leftExtreme, unsigned int a_rightExtreme);
-	float ySpeed;
+
 
 private:
 	float speed;

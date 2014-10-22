@@ -13,6 +13,7 @@ public:
 
 	virtual void Update(float a_deltaTime) = 0;
 	virtual void Draw() = 0;
+	virtual void Move(float a_deltaTime);
 
 	void SetSpriteID(unsigned int a_spriteID);
 	unsigned GetSpriteID();
@@ -34,14 +35,16 @@ public:
 	float GetLeft();
 	float GetRight();
 
-	bool isCollided(Entity* other);
-	virtual bool isCollideTop(Entity* other);
+	bool IsCollided(Entity* other);
+	virtual bool IsCollideTop(Entity* other);
 
 	Vector2 velocity;
 
+
+
 	//variables
-	float speed;
-	float yChange;
+	float xSpeed;
+	float ySpeed;
 
 	~Entity();
 
@@ -55,6 +58,7 @@ protected:
 	float x;
 	float y;
 
+	float yChange;
 };
 
 #endif _ENTITY_H_

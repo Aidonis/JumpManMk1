@@ -74,12 +74,12 @@ float Player::GetGravity(){
 	return gravity;
 }
 
-void Player::SetSpeed(float a_speed){
-	speed = a_speed;
+void Player::SetXSpeed(float a_speed){
+	xSpeed = a_speed;
 }
 
-float Player::GetSpeed(){
-	return speed;
+float Player::GetXSpeed(){
+	return xSpeed;
 }
 
 void Player::SetIsWinner(bool a_winner){
@@ -102,7 +102,7 @@ bool Player::scoreCheck(Entity* other){
 	}
 }
 
-bool Player::isCollideTop(Entity* other){
+bool Player::IsCollideTop(Entity* other){
 	if (GetBottom() - yChange >= other->GetTop()){
 		return true;
 	}
@@ -131,14 +131,14 @@ void Player::Update(float a_deltaTime){
 	// change in horizontal
 	if (IsKeyDown(moveLeft)){
 		velocity.x = -1;
-		x += a_deltaTime * speed * velocity.x;
+		x += a_deltaTime * xSpeed * velocity.x;
 		if (x < (leftExtreme + width * .5f)){
 			x = (leftExtreme + width * .5f);
 		}
 	}
 	if (IsKeyDown(moveRight)){
 		velocity.x = 1;
-		x += a_deltaTime * speed * velocity.x;
+		x += a_deltaTime * xSpeed * velocity.x;
 		if (x > (rightExtreme - width * .5f)){
 			x = (rightExtreme - width * .5f);
 		}

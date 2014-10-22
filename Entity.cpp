@@ -4,12 +4,13 @@
 Entity::Entity()
 {
 	velocity = Vector2();
-	speed = 0.0f;
+	xSpeed = 0.0f;
+	ySpeed = 0.0f;
 
 }
 
 //Box collision between entities
-bool Entity::isCollided(Entity* other){
+bool Entity::IsCollided(Entity* other){
 	if (GetLeft() > other->GetRight() ||
 		GetRight() < other->GetLeft() ||
 		GetTop() < other->GetBottom() ||
@@ -21,10 +22,12 @@ bool Entity::isCollided(Entity* other){
 	}
 }
 
-//If the entity is colliding with the top, true
-//Else entity is colliding with the bottom
-bool Entity::isCollideTop(Entity* other){
+bool Entity::IsCollideTop(Entity* other){
 	return false;
+}
+
+void Entity::Move(float a_deltaTime){
+
 }
 
 void Entity::SetSize(float a_width, float a_height)

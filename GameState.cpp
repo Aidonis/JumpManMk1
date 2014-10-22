@@ -90,7 +90,7 @@ void GameState::LoadPlayer(){
 	player->SetSize(30, 40);
 	player->SetPosition(150, 220);
 	player->SetGravity(.2f);
-	player->SetSpeed(200.0f);
+	player->SetXSpeed(200.0f);
 	player->SetSpriteID(CreateSprite("./images/p1_front.png", player->GetWidth(), player->GetHeight(), true));
 	player->SetMoveKeys('A', 'D', 'W');
 	player->SetMoveExtremes(0, SCREEN_WIDTH);
@@ -182,12 +182,10 @@ void GameState::LoadBarrels(){
 		if (i == 1){
 			barrelY = SCREEN_HEIGHT * 0.5f;
 			barrelX = SCREEN_WIDTH * 0.8f;
-			barrelSpeed *= -1;
 		}
 		else if (i == 2){
 			barrelX = SCREEN_WIDTH * 0.4f;
 			barrelY = SCREEN_HEIGHT * 0.2f;
-			barrelSpeed *= -1;
 		}
 		else
 		{
@@ -221,7 +219,7 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 			Ladders* ladder = dynamic_cast<Ladders*>(object);
 
 			//If colliding with any platforms
-			if (a_player->isCollided(ladder))
+			if (a_player->IsCollided(ladder))
 			{
 				a_player->SetOnLadder(true);
 			}
@@ -243,10 +241,10 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 
 			Platform* grass = dynamic_cast<Platform*>(object);
 	
-			//if (a_player->isCollided(grass))
-			if (a_player->isCollided(grass))
+			//if (a_player->IsCollided(grass))
+			if (a_player->IsCollided(grass))
 			{
-				if (a_player->isCollideTop(grass)){
+				if (a_player->IsCollideTop(grass)){
 					a_player->SetIsOnGround(true);
 					//Set the player on top of the platform
 					a_player->SetY(grass->GetTop() + a_player->GetHeight() * 0.5f);
@@ -284,7 +282,7 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 			if (a_player->scoreCheck(barrels)){
 				a_player->AddScore(10);
 			}
-			if (a_player->isCollided(barrels)){
+			if (a_player->IsCollided(barrels)){
 				//KILL THE PLAYER
 				a_player->SetIsActive(false);
 				//SWITCH TO DEATH STATE
@@ -314,19 +312,18 @@ void GameState::BarrelLogic(Barrel* a_barrel, float a_deltaTime){
 		{
 			Platform* grass = dynamic_cast<Platform*>(object);
 
-			if (a_barrel->isCollided(grass))
+			if (a_barrel->IsCollided(grass))
 			{
 				//If colliding with the top of the platform and barrel is not on a ladder
-				if (a_barrel->isCollideTop(grass))
+				if (a_barrel->IsCollideTop(grass))
 				{
 					a_barrel->SetIsOnGround(true);
-					a_barrel->SetY(grass->GetTop() + a_barrel->GetHeight() * 0.5f);
+	//				a_barrel->SetY(grass->GetTop() + a_barrel->GetHeight() * 0.5f);
 				}
 			}
 			if (a_barrel->GetIsOnGround()){
 				//left right move
-				a_barrel->velocity = Vector2(0, 0);
-				a_barrel->SetX(a_barrel->GetX() + (a_barrel->GetSpeed() * a_deltaTime));
+				a_barrel->velocity.x = 1;
 			}
 			else if (!a_barrel->GetIsOnGround())
 			{

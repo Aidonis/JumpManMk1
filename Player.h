@@ -18,8 +18,8 @@ public:
 	unsigned int GetRightKey();
 	unsigned int GetJumpKey();
 
-	void SetSpeed(float speed);
-	float GetSpeed();
+	void SetXSpeed(float speed);
+	float GetXSpeed();
 
 	void SetGravity(float a_gravity);
 	float GetGravity();
@@ -45,9 +45,7 @@ public:
 	void SetIsOnGround(bool a_grounded);
 	bool GetIsOnGround();
 
-	virtual bool isCollideTop(Entity* other);
-
-	float ySpeed;
+	virtual bool IsCollideTop(Entity* other);
 
 private:
 
