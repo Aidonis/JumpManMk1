@@ -135,7 +135,7 @@ void GameState::LoadLadders()
 {
 	//Initial Ladder
 	float ladderX = SCREEN_WIDTH * 0.8f;
-	float ladderY = 145;
+	float ladderY = 155;
 	
 	for (int j = 0; j < 2; j++){
 		for (int i = 0; i < 4; i++){
@@ -186,7 +186,7 @@ void GameState::LoadBarrels(){
 		}
 		else if (i == 2){
 			barrelX = SCREEN_WIDTH * 0.4f;
-			barrelY = SCREEN_HEIGHT * 0.9f;
+			barrelY = SCREEN_HEIGHT * 0.2f;
 			barrelSpeed *= -1;
 		}
 		else
@@ -198,13 +198,10 @@ void GameState::LoadBarrels(){
 		barrels->SetSize(50, 50);
 		barrels->SetSpriteID(spriteID);
 
-		barrels->SetGravity(.2f);
 		barrels->SetSpeed(barrelSpeed);
-		barrels->SetAccel(700.0f);
 
 		barrels->SetPosition(barrelX, barrelY);
 		barrels->SetMoveExtremes(0, SCREEN_WIDTH);
-		MoveSprite(barrels->GetSpriteID(), barrels->GetX(), barrels->GetY());
 
 		gameObjects.push_back(barrels);
 	}
@@ -249,30 +246,33 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 			//if (a_player->isCollided(grass))
 			if (a_player->isCollided(grass))
 			{
-				//If the player is colliding with the top of the grass and not on a ladder
-				//Set fall velocity to 0 and set player position above the platform
+				if (a_player->isCollideTop(grass)){
 					a_player->SetIsOnGround(true);
-					a_player->velocity = Vector2(0,0);
-					//a_player->SetY(grass->GetTop() + a_player->GetHeight() * 0.5f);
+					//Set the player on top of the platform
+					a_player->SetY(grass->GetTop() + a_player->GetHeight() * 0.5f);
 
 					//If the player is above the final platform he wins
 					if (a_player->GetY() >= SCREEN_HEIGHT * 0.8f && a_player->GetX() >= SCREEN_WIDTH * 0.8f - 35.0f && a_player->GetX() <= SCREEN_WIDTH * 0.8f + 35.0f){
 						a_player->SetIsWinner(true);
+					}
 				}
+
 			}
 			if (a_player->GetIsOnGround()){
+				a_player->velocity = Vector2(0, 0);
+
 				//if the player is colliding with the platform and not on a ladder, press spacebar to jump
 				if (IsKeyDown(32))
 				{
+					a_player->ySpeed = 28000.f;
 					a_player->velocity.y = 1;
-					//a_player->SetIsOnGround(false);
 
 				}
 			}
 			else if (!a_player->GetIsOnGround() && !a_player->GetOnLadder())
 			{
+				a_player->ySpeed = 200;
 				a_player->velocity.y = -1;
-				a_player->yChange -= a_player->GetGravity();
 			}
 		}
 
@@ -319,7 +319,7 @@ void GameState::BarrelLogic(Barrel* a_barrel, float a_deltaTime){
 				if (a_barrel->isCollideTop(grass))
 				{
 					//Set Y Velocity to 0 and Y position on top of platform
-					a_barrel->SetVelocity(0.0f);
+					a_barrel->velocity = Vector2(0,0);
 					a_barrel->SetIsOnGround(true);
 					a_barrel->SetY(grass->GetTop() + a_barrel->GetHeight() * 0.5f);
 				}
@@ -328,9 +328,11 @@ void GameState::BarrelLogic(Barrel* a_barrel, float a_deltaTime){
 				//left right move
 				a_barrel->SetX(a_barrel->GetX() + (a_barrel->GetSpeed() * a_deltaTime));
 			}
-			else{
-				//falling
-				a_barrel->SetVelocity((a_barrel->GetVelocity() - (a_barrel->GetGravity())));
+			else if (!a_barrel->GetIsOnGround())
+			{
+				a_barrel->ySpeed = 150;
+				a_barrel->velocity.y = -1;
+				
 			}
 		}
 	}

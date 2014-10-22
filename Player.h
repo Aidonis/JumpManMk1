@@ -45,6 +45,8 @@ public:
 	void SetIsOnGround(bool a_grounded);
 	bool GetIsOnGround();
 
+	virtual bool isCollideTop(Entity* other);
+
 	float ySpeed;
 
 private:

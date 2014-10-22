@@ -13,7 +13,6 @@
 extern const int SCREEN_WIDTH = 600;
 extern const int SCREEN_HEIGHT = 800;
 
-//std::vector<Entity*> gameObjects = std::vector<Entity*>();
 
 int main(int argc, char* argv[])
 {
@@ -30,7 +29,7 @@ int main(int argc, char* argv[])
 	{
 		ClearScreen();
 
-		float deltaT = 0.0032f;//GetDeltaTime();
+		float deltaT = GetDeltaTime();
 
 		state.Update(deltaT);
 		state.Draw();

@@ -10,7 +10,7 @@ Player::Player()
 	onGround = false;
 
 	SetPosition(100, 420);
-	ySpeed = 25.0f;
+	ySpeed = 150.0f;
 	score = 0;
 	AddScore(0);
 }
@@ -102,6 +102,15 @@ bool Player::scoreCheck(Entity* other){
 	}
 }
 
+bool Player::isCollideTop(Entity* other){
+	if (GetBottom() - yChange >= other->GetTop()){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
 void Player::SetOnLadder(bool a_onLadder){
 	onLadder = a_onLadder;
 }
@@ -121,13 +130,15 @@ void Player::Update(float a_deltaTime){
 
 	// change in horizontal
 	if (IsKeyDown(moveLeft)){
-		x -= a_deltaTime * speed;
+		velocity.x = -1;
+		x += a_deltaTime * speed * velocity.x;
 		if (x < (leftExtreme + width * .5f)){
 			x = (leftExtreme + width * .5f);
 		}
 	}
 	if (IsKeyDown(moveRight)){
-		x += a_deltaTime * speed;
+		velocity.x = 1;
+		x += a_deltaTime * speed * velocity.x;
 		if (x > (rightExtreme - width * .5f)){
 			x = (rightExtreme - width * .5f);
 		}

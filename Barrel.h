@@ -13,8 +13,6 @@ public:
 	void Draw();
 
 	virtual bool isCollideTop(Entity* other);
-	
-	//bool circleCollide(Entity* other);
 
 	void SetSpeed(float speed);
 	float GetSpeed();
@@ -22,26 +20,15 @@ public:
 	void SetOnLadder(bool a_onLadder);
 	bool GetOnLadder();
 
-	void SetAccel(float a_acceleration);
-	float GetAccel();
-
-	void SetVelocity(float a_velocity);
-	float GetVelocity();
-
-	void SetGravity(float a_gravity);
-	float GetGravity();
-
 	void SetIsOnGround(bool a_grounded);
 	bool GetIsOnGround();
 
 	void SetMoveExtremes(unsigned int a_leftExtreme, unsigned int a_rightExtreme);
+	float ySpeed;
 
 private:
 	float speed;
-	float acceleration;
-	float gravity;
-	float velocity;
-	float ySpeed;
+
 	float leftExtreme;
 	float rightExtreme;
 
