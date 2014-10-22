@@ -45,10 +45,11 @@ public:
 	void SetIsOnGround(bool a_grounded);
 	bool GetIsOnGround();
 
+	float ySpeed;
+
 private:
 
 	float gravity;
-	float ySpeed;
 
 	//flags
 	bool onLadder;

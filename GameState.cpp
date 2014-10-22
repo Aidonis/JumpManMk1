@@ -88,7 +88,7 @@ void GameState::LoadPlayer(){
 
 	//Player 1
 	player->SetSize(30, 40);
-	player->SetPosition(100, 120);
+	player->SetPosition(150, 220);
 	player->SetGravity(.2f);
 	player->SetSpeed(200.0f);
 	player->SetSpriteID(CreateSprite("./images/p1_front.png", player->GetWidth(), player->GetHeight(), true));
@@ -216,9 +216,6 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 	a_player->SetOnLadder(false);
 	a_player->SetIsOnGround(false);
 
-	//All the collison
-	int count = 0;
-
 	for (auto object : gameObjects)
 	{
 		// If the current object is a ladder
@@ -230,9 +227,9 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 			if (a_player->isCollided(ladder))
 			{
 				a_player->SetOnLadder(true);
-				//a_player->SetVelocity(0.0f);
 			}
 			if (a_player->GetOnLadder()){
+				a_player->velocity = Vector2(0, 0);
 				if (IsKeyDown('W')){
 					a_player->SetY(a_player->GetY() + (75 * a_deltaTime));
 				}
@@ -256,33 +253,27 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 				//Set fall velocity to 0 and set player position above the platform
 					a_player->SetIsOnGround(true);
 					a_player->velocity = Vector2(0,0);
-					a_player->SetY(grass->GetTop() + a_player->GetHeight() * 0.5f);
+					//a_player->SetY(grass->GetTop() + a_player->GetHeight() * 0.5f);
 
 					//If the player is above the final platform he wins
 					if (a_player->GetY() >= SCREEN_HEIGHT * 0.8f && a_player->GetX() >= SCREEN_WIDTH * 0.8f - 35.0f && a_player->GetX() <= SCREEN_WIDTH * 0.8f + 35.0f){
 						a_player->SetIsWinner(true);
-				}
-				if (a_player->GetOnLadder())
-				{
-					a_player->velocity = Vector2(0,0);
 				}
 			}
 			if (a_player->GetIsOnGround()){
 				//if the player is colliding with the platform and not on a ladder, press spacebar to jump
 				if (IsKeyDown(32))
 				{
-					//Set velocity to itself + acceleration - some gravity
-					a_player->SetIsOnGround(false);
-					a_player->velocity = Vector2(0, 1);
-					//a_player->SetVelocity(a_player->GetVelocity() + a_player->GetAccel() - (a_player->GetGravity()));
+					a_player->velocity.y = 1;
+					//a_player->SetIsOnGround(false);
+
 				}
 			}
-			else
+			else if (!a_player->GetIsOnGround() && !a_player->GetOnLadder())
 			{
-				a_player->velocity = Vector2(0, -1);
-				//a_player->SetVelocity((a_player->GetVelocity() - (a_player->GetGravity())));
+				a_player->velocity.y = -1;
+				a_player->yChange -= a_player->GetGravity();
 			}
-			count++;
 		}
 
 

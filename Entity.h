@@ -41,6 +41,7 @@ public:
 
 	//variables
 	float speed;
+	float yChange;
 
 	~Entity();
 

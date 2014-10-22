@@ -9,7 +9,8 @@ Player::Player()
 	isWinner = false;
 	onGround = false;
 
-	ySpeed = 5.0f;
+	SetPosition(100, 420);
+	ySpeed = 25.0f;
 	score = 0;
 	AddScore(0);
 }
@@ -115,8 +116,8 @@ void Player::Draw(){
 void Player::Update(float a_deltaTime){
 
 	//Speed * Velocity * Delta
-	y = ySpeed * velocity.y * a_deltaTime;
-
+	yChange = ySpeed * velocity.y * a_deltaTime;
+	y += yChange;
 
 	// change in horizontal
 	if (IsKeyDown(moveLeft)){
