@@ -2,6 +2,7 @@
 #include "AIE.h"
 #include "GameState.h"
 #include "StateMachine.h"
+#include "Leaderboard.h"
 
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
@@ -24,9 +25,14 @@ void MainMenuState::Initialize()
 
 void MainMenuState::Update(float a_deltaTime, StateMachine* a_pSM)
 {
+	//Enter
 	if (IsKeyDown(257))
 	{
 		a_pSM->PushState(new GameState());
+	}
+	//F1
+	if (IsKeyDown(290)){
+		a_pSM->PushState(new Leaderboard());
 	}
 }
 

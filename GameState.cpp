@@ -269,6 +269,7 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 
 				}
 			}
+			//If not on the ground and not on a ladder
 			else if (!a_player->GetIsOnGround() && !a_player->GetOnLadder())
 			{
 				a_player->ySpeed = 200;

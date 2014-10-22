@@ -99,6 +99,8 @@
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="source\Highscores.cpp" />
+    <ClCompile Include="source\Leaderboard.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="StateMachine.cpp" />
     <ClCompile Include="WinnerState.cpp" />
@@ -110,6 +112,8 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="include\AIE.h" />
+    <ClInclude Include="include\Highscores.h" />
+    <ClInclude Include="include\Leaderboard.h" />
     <ClInclude Include="include\Vector2.h" />
     <ClInclude Include="Ladders.h" />
     <ClInclude Include="MainMenuState.h" />
