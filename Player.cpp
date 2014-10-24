@@ -10,7 +10,7 @@ Player::Player()
 	onGround = false;
 
 	SetPosition(100, 420);
-	ySpeed = 150.0f;
+	ySpeed = 50.0f;
 	score = 0;
 	AddScore(0);
 }
