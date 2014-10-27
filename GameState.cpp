@@ -89,7 +89,7 @@ void GameState::LoadPlayer(){
 	//Player 1
 	player->SetSize(30, 40);
 	player->SetPosition(150, 220);
-	player->SetGravity(.2f);
+	player->SetGravity(.35f);
 	player->SetXSpeed(200.0f);
 	player->SetSpriteID(CreateSprite("./images/p1_front.png", player->GetWidth(), player->GetHeight(), true));
 	player->SetMoveKeys('A', 'D', 'W');
@@ -210,6 +210,7 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 {
 	a_player->SetOnLadder(false);
 	a_player->SetIsOnGround(false);
+	a_player->velocity.y -= a_player->GetGravity();
 
 	for (auto object : gameObjects)
 	{
@@ -226,10 +227,10 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 			if (a_player->GetOnLadder()){
 				a_player->velocity = Vector2(0, 0);
 				if (IsKeyDown('W')){
-					a_player->SetY(a_player->GetY() + (75 * a_deltaTime));
+					a_player->velocity.y = 1;
 				}
 				if (IsKeyDown('S')){
-					a_player->SetY(a_player->GetY() - (75 * a_deltaTime));
+					a_player->velocity.y = -1;
 				}
 			}
 		}
@@ -256,20 +257,19 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 				}
 
 			}
-			if (a_player->GetIsOnGround()){
+			if (a_player->GetIsOnGround() && !a_player->GetOnLadder()){
 				a_player->velocity = Vector2(0, 0);
 
 				//if the player is colliding with the platform and not on a ladder, press spacebar to jump
 				if (IsKeyDown(32))
 				{
-						a_player->velocity.y = 1;
-						a_player->ySpeed = 40;
-						a_player->SetIsOnGround(false);
+					a_player->velocity.y = 5;
+					a_player->SetIsOnGround(false);
 				}
 			}
 			//If not on the ground and not on a ladder
-			else /*(!a_player->GetIsOnGround() && !a_player->GetOnLadder())*/{
-				a_player->velocity.y -= -1.f; 
+			else if (!a_player->GetIsOnGround() && !a_player->GetOnLadder()){
+			//	a_player->velocity.y -= a_player->GetGravity();
 			}
 		}
 
