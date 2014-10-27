@@ -27,8 +27,11 @@ private:
 	void LoadLadders();
 	void LoadPlayer();
 	void LoadBarrels();
-	//bool IsGrounded(Player* a_player);
 
+	int highscore;
+	int score;
+	
+	char p1Score[20];
 
 private:
 	static std::vector<Entity*> gameObjects;

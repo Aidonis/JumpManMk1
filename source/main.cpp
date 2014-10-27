@@ -8,6 +8,7 @@
 #include "StateMachine.h"
 #include "MainMenuState.h"
 #include "GameState.h"
+#include "SplashScreen.h"
 
 //Const
 extern const int SCREEN_WIDTH = 600;
@@ -22,7 +23,7 @@ int main(int argc, char* argv[])
 	SetBackgroundColour(SColour(0, 0, 0, 255));
 
 	StateMachine state;
-	state.PushState(new MainMenuState());
+	state.PushState(new SplashScreen());
 	
 
 	//Game Loop

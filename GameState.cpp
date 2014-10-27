@@ -4,6 +4,8 @@
 #include "AIE.h"
 #include "StateMachine.h"
 #include <iostream>
+#include "Highscores.h"
+#include "Leaderboard.h"
 
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
@@ -11,6 +13,7 @@ std::vector<Entity*> GameState::gameObjects;
 
 GameState::GameState(void)
 {
+	score = 0;
 }
 
 
@@ -26,7 +29,16 @@ void GameState::Initialize()
 	LoadLadders();
 	LoadBarrels();
 	LoadPlayer();
-	
+
+	Highscores scores;
+	scores.LoadScores();
+	if (scores.IsEmpty()){
+		highscore = 0;
+	}
+	else{
+		scores.SortScores();
+		highscore = *scores.GetScores().begin();
+	}
 }
 
 void GameState::Update(float a_deltaTime, StateMachine* a_pSM)
@@ -46,11 +58,14 @@ void GameState::Update(float a_deltaTime, StateMachine* a_pSM)
 
 			PlayerLogic(player, a_deltaTime);
 			if (!player->GetIsActive()){
-
 				a_pSM->SwitchState(new DeathState());
 			}
 			if (player->GetIsWinner()){
-				a_pSM->SwitchState(new WinnerState);
+				Leaderboard* leaderboard = new Leaderboard();
+				leaderboard->SetPlayerScore(score);
+				BaseState* lastState = a_pSM->SwitchState(leaderboard);
+				delete lastState;
+				//a_pSM->SwitchState(new WinnerState);
 			}
 		}
 		if (dynamic_cast<Barrel*>(object) != 0)
@@ -71,7 +86,9 @@ void GameState::Draw()
 		object->Draw();
 	}
 
-	//Print Score Stuff
+	//Draw Score
+	sprintf(p1Score, "%05d", score);
+	DrawString(p1Score, SCREEN_WIDTH * 0.15f, SCREEN_HEIGHT - 35);
 	DrawString("Score < 1 >", SCREEN_WIDTH * 0.1f, SCREEN_HEIGHT - 2);
 
 }
@@ -176,7 +193,7 @@ void GameState::LoadBarrels(){
 	float barrelY = SCREEN_HEIGHT * 0.8f;
 	float barrelSpeed = 10.f;
 
-	unsigned int spriteID = CreateSprite("./images/dirtCaveRockLarge.png", 50, 50, true);
+	unsigned int spriteID = CreateSprite("./images/dirtCaveRockLarge.png", 40, 40, true);
 
 	for (int i = 0; i < 3; i++){
 		if (i == 1){
@@ -193,7 +210,7 @@ void GameState::LoadBarrels(){
 		}
 		Barrel* barrels = new Barrel();
 
-		barrels->SetSize(50, 50);
+		barrels->SetSize(40, 40);
 		barrels->SetSpriteID(spriteID);
 
 		barrels->SetSpeed(barrelSpeed);
@@ -208,7 +225,6 @@ void GameState::LoadBarrels(){
 
 void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 {
-	a_player->SetOnLadder(false);
 	a_player->SetIsOnGround(false);
 	a_player->velocity.y -= a_player->GetGravity();
 
@@ -223,6 +239,9 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 			if (a_player->IsCollided(ladder))
 			{
 				a_player->SetOnLadder(true);
+			}
+			else{
+				a_player->SetOnLadder(false);
 			}
 			if (a_player->GetOnLadder()){
 				a_player->velocity = Vector2(0, 0);
@@ -245,7 +264,7 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 			//if (a_player->IsCollided(grass))
 			if (a_player->IsCollided(grass))
 			{
-				if (a_player->IsCollideTop(grass)){
+				if (a_player->IsCollideTop(grass) && !a_player->GetOnLadder()){
 					a_player->SetIsOnGround(true);
 					//Set the player on top of the platform
 					a_player->SetY(grass->GetTop() + a_player->GetHeight() * 0.5f);
@@ -257,7 +276,7 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 				}
 
 			}
-			if (a_player->GetIsOnGround() && !a_player->GetOnLadder()){
+			if (a_player->GetIsOnGround()){
 				a_player->velocity = Vector2(0, 0);
 
 				//if the player is colliding with the platform and not on a ladder, press spacebar to jump
@@ -267,10 +286,6 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 					a_player->SetIsOnGround(false);
 				}
 			}
-			//If not on the ground and not on a ladder
-			else if (!a_player->GetIsOnGround() && !a_player->GetOnLadder()){
-			//	a_player->velocity.y -= a_player->GetGravity();
-			}
 		}
 
 
@@ -279,6 +294,7 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 			Barrel* barrels = dynamic_cast<Barrel*>(object);
 			if (a_player->scoreCheck(barrels)){
 				a_player->AddScore(10);
+				score = a_player->GetScore();
 			}
 			if (a_player->IsCollided(barrels)){
 				//KILL THE PLAYER
@@ -287,10 +303,6 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 			}
 		}
 	}
-
-
-	//Draw Score
-	DrawString(a_player->GetScoreAsString(), SCREEN_WIDTH * 0.15f, SCREEN_HEIGHT - 35);
 }
 
 void GameState::BarrelLogic(Barrel* a_barrel, float a_deltaTime){
@@ -298,7 +310,6 @@ void GameState::BarrelLogic(Barrel* a_barrel, float a_deltaTime){
 	//Barrel default to not on ladder
 	a_barrel->SetOnLadder(false);
 	a_barrel->SetIsOnGround(false);
-	//Barrel default state is falling
 
 	for (auto object : gameObjects)
 	{
@@ -320,14 +331,12 @@ void GameState::BarrelLogic(Barrel* a_barrel, float a_deltaTime){
 				}
 			}
 			if (a_barrel->GetIsOnGround()){
-				//left right move
-				a_barrel->velocity.x = 1;
+				a_barrel->velocity.x = -1;
 			}
 			else if (!a_barrel->GetIsOnGround())
 			{
 				a_barrel->ySpeed = 150;
-				a_barrel->velocity.y = -1;
-				
+				a_barrel->velocity.y = -.2;
 			}
 		}
 	}

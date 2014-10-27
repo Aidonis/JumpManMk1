@@ -94,7 +94,7 @@ bool Player::scoreCheck(Entity* other){
 	if (GetLeft() > other->GetRight() ||
 		GetRight() < other->GetLeft() ||
 		GetBottom() < other->GetTop() ||
-		GetTop() > other->GetTop() + (other->GetHeight() * 3)){
+		GetTop() > other->GetTop() + (other->GetHeight() * 4)){
 		return false;
 	}
 	else{

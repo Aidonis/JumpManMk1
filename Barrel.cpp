@@ -29,13 +29,13 @@ void Barrel::Move(float a_deltaTime){
 
 	x += xSpeed * velocity.x * a_deltaTime;
 
-	if (x < (leftExtreme + width * .5f)){
+	if (x <= (leftExtreme + width * .5f)){
 		x = (leftExtreme + width * .5f);
-		velocity.x = 1;
+		velocity.x *= -1;
 	}
-	if (x >(rightExtreme - width * .5f)){
+	else if (x >= (rightExtreme - width * .5f)){
 		x = (rightExtreme - width * .5f);
-		velocity.x = -1;
+		velocity.x *= -1;
 	}
 }
 
