@@ -89,8 +89,8 @@ void GameState::LoadPlayer(){
 	//Player 1
 	player->SetSize(30, 40);
 	player->SetPosition(150, 220);
-	player->SetGravity(.35f);
-	player->SetXSpeed(200.0f);
+	player->SetGravity(.04f);
+	player->SetXSpeed(250.0f);
 	player->SetSpriteID(CreateSprite("./images/p1_front.png", player->GetWidth(), player->GetHeight(), true));
 	player->SetMoveKeys('A', 'D', 'W');
 	player->SetMoveExtremes(0, SCREEN_WIDTH);
