@@ -27,6 +27,11 @@ void DeathState::Update(float a_deltaTime, StateMachine* a_pSM)
 	{
 		a_pSM->SwitchState(new GameState());
 	}
+	if (IsKeyDown(256)){
+		BaseState* lastState = a_pSM->PopState();
+		delete lastState;
+		return;
+	}
 }
 
 void DeathState::Draw()

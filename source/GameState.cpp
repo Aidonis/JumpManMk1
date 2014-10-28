@@ -3,7 +3,6 @@
 #include "WinnerState.h"
 #include "AIE.h"
 #include "StateMachine.h"
-#include <iostream>
 #include "Highscores.h"
 #include "Leaderboard.h"
 
@@ -47,6 +46,7 @@ void GameState::Initialize()
 
 void GameState::Update(float a_deltaTime, StateMachine* a_pSM)
 {
+	//Esc
 	if (IsKeyDown(256))
 	{
 		BaseState* lastState = a_pSM->PopState();
