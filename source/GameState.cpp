@@ -194,22 +194,25 @@ void GameState::LoadLadders()
 void GameState::LoadBarrels(){
 	float barrelX = SCREEN_WIDTH * 0.2f;
 	float barrelY = SCREEN_HEIGHT * 0.7f;
-	float barrelSpeed = 10.f;
+	int barrelVelocity = -1;
+	float barrelSpeed = 20.f;
 
 	unsigned int spriteID = CreateSprite("./images/dirtCaveRockLarge.png", 40, 40, true);
 
 	for (int i = 0; i < 3; i++){
 		if (i == 1){
-			barrelY = SCREEN_HEIGHT * 0.4f;
-			barrelX = SCREEN_WIDTH * 0.8f;
+			barrelX = SCREEN_WIDTH * 0.3f;
+			barrelY = SCREEN_HEIGHT * 0.43f;
+			barrelVelocity = -1;
 		}
 		else if (i == 2){
-			barrelX = SCREEN_WIDTH * 0.4f;
-			barrelY = SCREEN_HEIGHT * 0.1f;
+			barrelX = SCREEN_WIDTH * 0.6f;
+			barrelY = SCREEN_HEIGHT * 0.12f;
 		}
 		else
 		{
 			barrelY = SCREEN_HEIGHT * 0.75f;
+			barrelVelocity = 1;
 		}
 		Barrel* barrels = new Barrel();
 
@@ -219,7 +222,7 @@ void GameState::LoadBarrels(){
 		barrels->SetSpeed(barrelSpeed);
 
 		barrels->SetPosition(barrelX, barrelY);
-		barrels->velocity.x = -1;
+		barrels->velocity.x = barrelVelocity;
 		barrels->SetMoveExtremes(0, SCREEN_WIDTH);
 
 		gameObjects.push_back(barrels);
