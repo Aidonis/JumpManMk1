@@ -29,7 +29,6 @@ private:
 	void LoadBarrels();
 
 	int highscore;
-	int score;
 	
 	char p1Score[20];
 

@@ -21,6 +21,7 @@ public:
 
 private:
 	Highscores scores;
+	char p1Score[20];
 };
 
 #endif //_LEADERBOARD_H_

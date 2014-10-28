@@ -13,8 +13,6 @@
 //Const
 extern const int SCREEN_WIDTH = 600;
 extern const int SCREEN_HEIGHT = 800;
-static unsigned int SCORE = 0;
-
 
 int main(int argc, char* argv[])
 {

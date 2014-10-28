@@ -13,5 +13,5 @@ public:
 	virtual void Draw() = 0;
 	virtual void Destroy() = 0;
 
-	static unsigned int HIGH_SCORE;
+	static int SCORE;
 };

@@ -9,11 +9,14 @@
 
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
+
+int BaseState::SCORE;
+
 std::vector<Entity*> GameState::gameObjects;
 
 GameState::GameState(void)
 {
-	score = 0;
+	BaseState::SCORE = 0;
 }
 
 
@@ -63,7 +66,7 @@ void GameState::Update(float a_deltaTime, StateMachine* a_pSM)
 			}
 			if (player->GetIsWinner()){
 				Leaderboard* leaderboard = new Leaderboard();
-				leaderboard->SetPlayerScore(score);
+				leaderboard->SetPlayerScore(BaseState::SCORE);
 				BaseState* lastState = a_pSM->SwitchState(leaderboard);
 				delete lastState;
 			}
@@ -87,7 +90,7 @@ void GameState::Draw()
 	}
 
 	//Draw Score
-	sprintf(p1Score, "%05d", score);
+	sprintf(p1Score, "%05d", BaseState::SCORE);
 	DrawString(p1Score, SCREEN_WIDTH * 0.15f, SCREEN_HEIGHT - 35);
 	DrawString("Score < 1 >", SCREEN_WIDTH * 0.1f, SCREEN_HEIGHT - 2);
 
@@ -273,8 +276,8 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 		else if (dynamic_cast<Barrel*>(object) != 0){
 			Barrel* barrels = dynamic_cast<Barrel*>(object);
 			if (a_player->scoreCheck(barrels)){
-				a_player->AddScore(10);
-				score = a_player->GetScore();
+				a_player->AddScore(100);
+				BaseState::SCORE = a_player->GetScore();
 			}
 			if (a_player->IsCollided(barrels)){
 				//KILL THE PLAYER
@@ -307,7 +310,7 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 		//if the player is colliding with the platform and not on a ladder, press spacebar to jump
 		if (IsKeyDown(32))
 		{
-			a_player->velocity.y = 5;
+			a_player->velocity.y = 2;
 			a_player->SetIsOnGround(false);
 		}
 	}
