@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
 	SetBackgroundColour(SColour(0, 0, 0, 255));
 
 	StateMachine state;
-	state.PushState(new SplashScreen());
+	state.PushState(new MainMenuState());
 	
 
 	//Game Loop

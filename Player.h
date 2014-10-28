@@ -57,6 +57,7 @@ private:
 	bool isWinner;
 	bool onGround;
 
+
 	unsigned int score;
 	char scoreAsString[6];
 

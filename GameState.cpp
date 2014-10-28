@@ -25,10 +25,11 @@ void GameState::Initialize()
 {
 	//Load Game Objects
 	gameObjects.erase(gameObjects.begin(), gameObjects.end());
-	LoadGrass();
+
 	LoadLadders();
-	LoadBarrels();
 	LoadPlayer();
+	LoadGrass();
+	LoadBarrels();
 
 	Highscores scores;
 	scores.LoadScores();
@@ -65,7 +66,6 @@ void GameState::Update(float a_deltaTime, StateMachine* a_pSM)
 				leaderboard->SetPlayerScore(score);
 				BaseState* lastState = a_pSM->SwitchState(leaderboard);
 				delete lastState;
-				//a_pSM->SwitchState(new WinnerState);
 			}
 		}
 		if (dynamic_cast<Barrel*>(object) != 0)
@@ -120,7 +120,6 @@ void GameState::LoadGrass()
 	//Initial position
 	float grassX = -35.f;
 	float grassY = 35;
-	unsigned int spriteID = CreateSprite("./images/tiles/grassHalfMid.png", 70, 70, true);
 
 	for (int i = 0; i < TOTAL_PLATFORMS; i++){
 
@@ -145,6 +144,7 @@ void GameState::LoadGrass()
 
 		//Add to array
 		gameObjects.push_back(grass);
+
 	}
 }
 
@@ -152,7 +152,7 @@ void GameState::LoadLadders()
 {
 	//Initial Ladder
 	float ladderX = SCREEN_WIDTH * 0.8f;
-	float ladderY = 155;
+	float ladderY = 105;
 	
 	for (int j = 0; j < 2; j++){
 		for (int i = 0; i < 4; i++){
@@ -190,23 +190,23 @@ void GameState::LoadLadders()
 
 void GameState::LoadBarrels(){
 	float barrelX = SCREEN_WIDTH * 0.2f;
-	float barrelY = SCREEN_HEIGHT * 0.8f;
+	float barrelY = SCREEN_HEIGHT * 0.7f;
 	float barrelSpeed = 10.f;
 
 	unsigned int spriteID = CreateSprite("./images/dirtCaveRockLarge.png", 40, 40, true);
 
 	for (int i = 0; i < 3; i++){
 		if (i == 1){
-			barrelY = SCREEN_HEIGHT * 0.5f;
+			barrelY = SCREEN_HEIGHT * 0.4f;
 			barrelX = SCREEN_WIDTH * 0.8f;
 		}
 		else if (i == 2){
 			barrelX = SCREEN_WIDTH * 0.4f;
-			barrelY = SCREEN_HEIGHT * 0.2f;
+			barrelY = SCREEN_HEIGHT * 0.1f;
 		}
 		else
 		{
-			barrelY = SCREEN_HEIGHT * 0.8f;
+			barrelY = SCREEN_HEIGHT * 0.75f;
 		}
 		Barrel* barrels = new Barrel();
 
@@ -216,6 +216,7 @@ void GameState::LoadBarrels(){
 		barrels->SetSpeed(barrelSpeed);
 
 		barrels->SetPosition(barrelX, barrelY);
+		barrels->velocity.x = -1;
 		barrels->SetMoveExtremes(0, SCREEN_WIDTH);
 
 		gameObjects.push_back(barrels);
@@ -225,8 +226,9 @@ void GameState::LoadBarrels(){
 
 void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 {
-	a_player->SetIsOnGround(false);
 	a_player->velocity.y -= a_player->GetGravity();
+	a_player->SetOnLadder(false);
+	a_player->SetIsOnGround(false);
 
 	for (auto object : gameObjects)
 	{
@@ -235,36 +237,25 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 
 			Ladders* ladder = dynamic_cast<Ladders*>(object);
 
-			//If colliding with any platforms
+			//If colliding with any ladders
 			if (a_player->IsCollided(ladder))
 			{
 				a_player->SetOnLadder(true);
 			}
-			else{
+			else if (!a_player->GetOnLadder()){
 				a_player->SetOnLadder(false);
-			}
-			if (a_player->GetOnLadder()){
-				a_player->velocity = Vector2(0, 0);
-				if (IsKeyDown('W')){
-					a_player->velocity.y = 1;
-				}
-				if (IsKeyDown('S')){
-					a_player->velocity.y = -1;
-				}
 			}
 		}
 
 		// If the current object is a platform
-		else if (dynamic_cast<Platform*>(object) != 0)
+		if (dynamic_cast<Platform*>(object) != 0)
 		{
-			
-
 			Platform* grass = dynamic_cast<Platform*>(object);
-	
-			//if (a_player->IsCollided(grass))
-			if (a_player->IsCollided(grass))
+
+			//if the player is not colliding with any platforms
+			if (a_player->IsCollided(grass) && !a_player->GetOnLadder())
 			{
-				if (a_player->IsCollideTop(grass) && !a_player->GetOnLadder()){
+				if (a_player->IsCollideTop(grass)){
 					a_player->SetIsOnGround(true);
 					//Set the player on top of the platform
 					a_player->SetY(grass->GetTop() + a_player->GetHeight() * 0.5f);
@@ -276,18 +267,7 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 				}
 
 			}
-			if (a_player->GetIsOnGround()){
-				a_player->velocity = Vector2(0, 0);
-
-				//if the player is colliding with the platform and not on a ladder, press spacebar to jump
-				if (IsKeyDown(32))
-				{
-					a_player->velocity.y = 5;
-					a_player->SetIsOnGround(false);
-				}
-			}
 		}
-
 
 		// if it's a barrel
 		else if (dynamic_cast<Barrel*>(object) != 0){
@@ -301,6 +281,34 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 				a_player->SetIsActive(false);
 				//SWITCH TO DEATH STATE
 			}
+		}
+	}
+
+	if (a_player->GetOnLadder())
+	{
+		a_player->SetIsOnGround(false);
+	}
+
+	//Ladder Movement
+	if (a_player->GetOnLadder()){
+		a_player->velocity = Vector2(0, 0);
+		if (IsKeyDown('W')){
+			a_player->velocity.y = 1;
+		}
+		if (IsKeyDown('S')){
+			a_player->velocity.y = -1;
+		}
+	}
+
+	//Jumping
+	if (a_player->GetIsOnGround() && !a_player->GetOnLadder()){
+		a_player->velocity = Vector2(0, 0);
+
+		//if the player is colliding with the platform and not on a ladder, press spacebar to jump
+		if (IsKeyDown(32))
+		{
+			a_player->velocity.y = 5;
+			a_player->SetIsOnGround(false);
 		}
 	}
 }
@@ -329,9 +337,6 @@ void GameState::BarrelLogic(Barrel* a_barrel, float a_deltaTime){
 					a_barrel->SetIsOnGround(true);
 					a_barrel->SetY(grass->GetTop() + a_barrel->GetHeight() * 0.5f);
 				}
-			}
-			if (a_barrel->GetIsOnGround()){
-				a_barrel->velocity.x = -1;
 			}
 			else if (!a_barrel->GetIsOnGround())
 			{
