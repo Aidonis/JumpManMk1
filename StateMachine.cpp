@@ -1,6 +1,5 @@
 #include "StateMachine.h"
 
-
 StateMachine::StateMachine(void)
 {
 }
@@ -43,5 +42,9 @@ void StateMachine::Update(float a_deltaTime)
 
 void StateMachine::Draw()
 {
-	stateStack.back()->Draw();
+	if (!StateMachine::endGame){
+		stateStack.back()->Draw();
+	}
 }
+
+bool StateMachine::endGame = false;

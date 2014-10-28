@@ -17,6 +17,8 @@ public:
 	void Update(float a_deltaTime);
 	void Draw();
 
+	static bool endGame;
+
 private:
 	std::list<BaseState*> stateStack;
 };

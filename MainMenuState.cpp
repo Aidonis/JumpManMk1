@@ -34,6 +34,11 @@ void MainMenuState::Update(float a_deltaTime, StateMachine* a_pSM)
 	if (IsKeyDown(290)){
 		a_pSM->PushState(new Leaderboard());
 	}
+	//ESC
+	if (IsKeyDown('Q')){
+		StateMachine::endGame = true;
+		a_pSM->PopState();
+	}
 }
 
 void MainMenuState::Draw()
