@@ -276,7 +276,7 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 		else if (dynamic_cast<Barrel*>(object) != 0){
 			Barrel* barrels = dynamic_cast<Barrel*>(object);
 			if (a_player->scoreCheck(barrels)){
-				a_player->AddScore(100);
+				a_player->AddScore(10);
 				BaseState::SCORE = a_player->GetScore();
 			}
 			if (a_player->IsCollided(barrels)){
@@ -310,7 +310,7 @@ void GameState::PlayerLogic(Player* a_player, float a_deltaTime)
 		//if the player is colliding with the platform and not on a ladder, press spacebar to jump
 		if (IsKeyDown(32))
 		{
-			a_player->velocity.y = 2;
+			a_player->velocity.y = 5;
 			a_player->SetIsOnGround(false);
 		}
 	}

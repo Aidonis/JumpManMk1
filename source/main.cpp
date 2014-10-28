@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
 		state.Draw();
 		
 
-	} while (!FrameworkUpdate());
+	} while (!FrameworkUpdate() && !StateMachine::endGame);
 
 	Shutdown();
 

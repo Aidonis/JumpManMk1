@@ -90,39 +90,39 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Barrel.cpp" />
-    <ClCompile Include="BaseState.cpp" />
-    <ClCompile Include="DeathState.cpp" />
-    <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="GameState.cpp" />
-    <ClCompile Include="Ladders.cpp" />
-    <ClCompile Include="MainMenuState.cpp" />
-    <ClCompile Include="Platform.cpp" />
-    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="source\Barrel.cpp" />
+    <ClCompile Include="source\BaseState.cpp" />
+    <ClCompile Include="source\DeathState.cpp" />
+    <ClCompile Include="source\Entity.cpp" />
+    <ClCompile Include="source\GameState.cpp" />
+    <ClCompile Include="source\Ladders.cpp" />
+    <ClCompile Include="source\MainMenuState.cpp" />
+    <ClCompile Include="source\Platform.cpp" />
+    <ClCompile Include="source\Player.cpp" />
     <ClCompile Include="source\Highscores.cpp" />
     <ClCompile Include="source\Leaderboard.cpp" />
     <ClCompile Include="source\main.cpp" />
-    <ClCompile Include="SplashScreen.cpp" />
-    <ClCompile Include="StateMachine.cpp" />
-    <ClCompile Include="WinnerState.cpp" />
+    <ClCompile Include="source\SplashScreen.cpp" />
+    <ClCompile Include="source\StateMachine.cpp" />
+    <ClCompile Include="source\WinnerState.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Barrel.h" />
-    <ClInclude Include="BaseState.h" />
-    <ClInclude Include="DeathState.h" />
-    <ClInclude Include="Entity.h" />
-    <ClInclude Include="GameState.h" />
+    <ClInclude Include="include\Barrel.h" />
+    <ClInclude Include="include\BaseState.h" />
+    <ClInclude Include="include\DeathState.h" />
+    <ClInclude Include="include\Entity.h" />
+    <ClInclude Include="include\GameState.h" />
     <ClInclude Include="include\AIE.h" />
     <ClInclude Include="include\Highscores.h" />
     <ClInclude Include="include\Leaderboard.h" />
     <ClInclude Include="include\Vector2.h" />
-    <ClInclude Include="Ladders.h" />
-    <ClInclude Include="MainMenuState.h" />
-    <ClInclude Include="Platform.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="SplashScreen.h" />
-    <ClInclude Include="StateMachine.h" />
-    <ClInclude Include="WinnerState.h" />
+    <ClInclude Include="include\Ladders.h" />
+    <ClInclude Include="include\MainMenuState.h" />
+    <ClInclude Include="include\Platform.h" />
+    <ClInclude Include="include\Player.h" />
+    <ClInclude Include="include\SplashScreen.h" />
+    <ClInclude Include="include\StateMachine.h" />
+    <ClInclude Include="include\WinnerState.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
